@@ -18,8 +18,8 @@ public final class Constants {
     public static final class DrivetrainConstants{
 
         public static final int RightFrontID = 2;
-        public static final int RightBackID = 3;
-        public static final int LeftFrontID = 4;
+        public static final int RightBackID = 1;
+        public static final int LeftFrontID = 7;
         public static final int LeftBackID = 6;
 
     }

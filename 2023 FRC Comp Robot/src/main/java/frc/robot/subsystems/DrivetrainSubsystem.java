@@ -41,8 +41,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //encoder zeroing
     //encoder zeroing
 
-    rightControllerGroup.setInverted(true);
-    leftControllerGroup.setInverted(true);
+    RightFront.setInverted(true);
+    RightBack.setInverted(true);
+    LeftFront.setInverted(true);
+    LeftBack.setInverted(false);
   }
 
   public void arcadeDrive(double fwd, double rot) {
