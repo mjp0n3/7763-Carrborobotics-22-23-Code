@@ -23,17 +23,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //encoders were here
   //encoders were here
   
-  MotorControllerGroup leftControllerGroup = new MotorControllerGroup(RightBack, RightFront);
-  MotorControllerGroup rightControllerGroup = new MotorControllerGroup(LeftBack, LeftFront);
+  MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
+  MotorControllerGroup leftControllerGroup = new MotorControllerGroup(LeftBack, LeftFront);
 
   DifferentialDrive differentialDrive = new DifferentialDrive(leftControllerGroup, rightControllerGroup);
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
-    //restore defaults
-    //restore defaults
-    //restore defaults
-    //restore defaults
+    LeftBack.configFactoryDefault();
+    LeftFront.configFactoryDefault();
+    RightBack.configFactoryDefault();
+    RightFront.configFactoryDefault();
 
     //encoder zeroing
     //encoder zeroing
@@ -43,8 +43,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     RightFront.setInverted(true);
     RightBack.setInverted(true);
-    LeftFront.setInverted(true);
+    LeftFront.setInverted(false);
     LeftBack.setInverted(false);
+
   }
 
   public void arcadeDrive(double fwd, double rot) {

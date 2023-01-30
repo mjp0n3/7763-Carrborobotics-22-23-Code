@@ -52,8 +52,8 @@ public class RobotContainer {
     configureButtonBindings();
     drivetrainsubsystem.setDefaultCommand(driveCommand);
     //buttons
-    xbutton.whileHeld(grabbergrabCommand);
-    abutton.whileHeld(grabberreleaseCommand);
+    xbutton.whileTrue(grabbergrabCommand);
+    abutton.whileTrue(grabberreleaseCommand);
     // zbutton.toggleWhenPressed(Compressor);
     // ybutton.whileHeld(armCommand);
     // bbutton.whileHeld(armdownCommand);
