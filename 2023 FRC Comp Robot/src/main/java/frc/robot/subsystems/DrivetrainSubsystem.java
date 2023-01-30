@@ -23,13 +23,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //encoders were here
   //encoders were here
   
+<<<<<<< HEAD
   MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
   MotorControllerGroup leftControllerGroup = new MotorControllerGroup(LeftBack, LeftFront);
+=======
+  MotorControllerGroup leftControllerGroup = new MotorControllerGroup(LeftBack, LeftFront);
+  MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
+>>>>>>> ff75960f6c75ee2f30f102bb3cde156e00e9ba1a
 
   DifferentialDrive differentialDrive = new DifferentialDrive(leftControllerGroup, rightControllerGroup);
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
+<<<<<<< HEAD
+=======
+    //restore defaults
+    //restore defaults
+    //restore defaults
+    //restore defaults
+>>>>>>> ff75960f6c75ee2f30f102bb3cde156e00e9ba1a
     LeftBack.configFactoryDefault();
     LeftFront.configFactoryDefault();
     RightBack.configFactoryDefault();
@@ -49,8 +61,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void arcadeDrive(double fwd, double rot) {
-      differentialDrive.arcadeDrive(fwd, rot);
-    }
+//       differentialDrive.arcadeDrive(fwd, rot);
+       differentialDrive.curvatureDrive(fwd, rot, false);
+ }
     
   @Override
   public void periodic() {
