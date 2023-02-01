@@ -41,8 +41,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //encoder zeroing
     //encoder zeroing
 
-    RightFront.setInverted(true);
-    RightBack.setInverted(true);
+    RightFront.setInverted(false);
+    RightBack.setInverted(false);
     LeftFront.setInverted(false);
     LeftBack.setInverted(false);
 
