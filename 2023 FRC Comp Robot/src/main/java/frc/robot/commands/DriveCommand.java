@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,8 +35,8 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double forwardSpeed = RobotContainer.joystick.getX();
-    double turningSpeed = RobotContainer.joystick.getY();
+    double forwardSpeed = RobotContainer.joystick.getX() *Constants.DrivetrainConstants.maxdrivespeed;
+    double turningSpeed = RobotContainer.joystick.getY()*Constants.DrivetrainConstants.maxturnspeed;
     drivetrainSubsystem.arcadeDrive(forwardSpeed, turningSpeed);
     //update this to match the axis in driverstation
   }

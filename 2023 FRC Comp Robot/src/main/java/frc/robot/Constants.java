@@ -21,6 +21,8 @@ public final class Constants {
         public static final int RightBackID = 6; //motor 4
         public static final int LeftFrontID = 7; //motor 1
         public static final int LeftBackID = 1;  //motor 2
+        public static final double maxspeed = 0.75;
+        public static final double maxturn = 0.25;
 
     }
 
