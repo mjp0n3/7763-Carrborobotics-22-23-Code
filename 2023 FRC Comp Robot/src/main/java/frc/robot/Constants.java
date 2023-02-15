@@ -16,16 +16,40 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public final class Constants {
 
     public static final class DrivetrainConstants{
-
+        //motor id's
         public static final int RightFrontID = 2; //motor 3
         public static final int RightBackID = 6; //motor 4
         public static final int LeftFrontID = 7; //motor 1
         public static final int LeftBackID = 1;  //motor 2
-        public static final double maxspeed = 0.75;
-        public static final double maxturn = 0.25;
+        //sensitivity for robot driving with joysticks
+        public static final double maxdrivespeed = 0.75;
+        public static final double maxturnspeed = 0.75;
 
     }
 
+    public static final class DriveConstants{
+        //CisID constants
+        public static final double ksVolts = 0;
+        public static final double ksVoltsSecondsPerMeter = 0;
+        public static final double kaVoltSecondsSquaredPerMeter = 0;
+        public static final double kPDriveVel = 0;
+        
+        // public static final double kTrackWidthMeters = Units.inchesToMeters(23);
+        // public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
+        //         kTrackWidthMeters);
+            
+        // public static final double kRamseteB = 2;
+        // public static final double kRamseteZeta = 0.7;
+
+        // public static final double kGearRatio = 12.6;
+        // public static final double kWheelRadiusInches = 3;
+
+        // public static final double kLinearDistanceConversionFactor = (Units
+        //         .inchesToMeters(1 / (kGearRatio * 2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches)) * 10));
+
+
+    }
+    
     public static final int JoystickAxis1 = 0;
     public static final int ButtonA = 1;
     public static final int ButtonB = 2;
@@ -34,7 +58,7 @@ public final class Constants {
     public static final int ButtonZ= 5;
 
     public static final class ElectronicsConstants {
-        public static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.CTREPCM;
+        public static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
         public static int kLEDPort = 0;
     }
     public static final class GrabberConstants {
@@ -42,5 +66,9 @@ public final class Constants {
         public static final int GrabberDeployedPort = 2;
         public static final int GrabberRetractedPort = 3;
     }
-
+    public static final class ArmConstants {
+        //arm motor ports (change)
+        public static final int ArmLeftID = 8;
+        public static final int ArmRightID = 9;
+    }
 }

@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;
+import frc.robot.commands.LowerToGroundCommand;
+import frc.robot.commands.RaiseToHighCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,7 +38,12 @@ public class RobotContainer {
   private final GrabberGrabCommand grabbergrabCommand = new GrabberGrabCommand(grabbersubsystem);
   //grabber release command
   private final GrabberReleaseCommand grabberreleaseCommand = new GrabberReleaseCommand(grabbersubsystem);
-  //compressor command
+  //armsubsystem
+  private final ArmSubsystem armsubsystem = new ArmSubsystem();
+  //arm down command
+  private final LowerToGroundCommand lowertogroundCommand = new LowerToGroundCommand(armsubsystem);
+  //arm up command
+  private final RaiseToHighCommand raisetohighCommand = new RaiseToHighCommand(armsubsystem);
 
   // private final DriveCommand driveCommand = new DriveCommand(drivetrainsubsystem);
 
@@ -43,7 +51,7 @@ public class RobotContainer {
   JoystickButton abutton = new JoystickButton(joystick, Constants.ButtonA);
   JoystickButton xbutton = new JoystickButton(joystick, Constants.ButtonX);
   JoystickButton zbutton = new JoystickButton(joystick, Constants.ButtonZ);
-  // JoystickButton bbutton = new JoystickButton(joystick, Constants.ButtonB);
+  JoystickButton bbutton = new JoystickButton(joystick, Constants.ButtonB);
   // JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonY);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -54,9 +62,9 @@ public class RobotContainer {
     //buttons
     xbutton.whileTrue(grabbergrabCommand);
     abutton.whileTrue(grabberreleaseCommand);
-    // zbutton.toggleWhenPressed(Compressor);
+    zbutton.whileTrue(lowertogroundCommand);
+    bbutton.whileTrue(raisetohighCommand);
     // ybutton.whileHeld(armCommand);
-    // bbutton.whileHeld(armdownCommand);
 
   }
 
