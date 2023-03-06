@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DrivetrainConstants;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,8 +16,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.revrobotics.RelativeEncoder;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -30,9 +29,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
    WPI_TalonSRX LeftFront = new WPI_TalonSRX(Constants.DrivetrainConstants.LeftFrontID);
    WPI_TalonSRX LeftBack = new WPI_TalonSRX(Constants.DrivetrainConstants.LeftBackID);
 
-  RelativeEncoder leftEncoder = LeftFront.getEncoder();
-  RelativeEncoder rightEncoder = RightFront.getEncoder();
-  
+   //update the ports to be in constants later
+   Encoder leftEncoder = new Encoder(4, 5, false, Encoder.EncodingType.k2X); 
+   Encoder rightEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k2X); 
+
+
   MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
   MotorControllerGroup leftControllerGroup = new MotorControllerGroup(LeftBack, LeftFront);
 
@@ -52,14 +53,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     RightBack.configFactoryDefault();
     RightFront.configFactoryDefault();
 
-    leftEncoder.setPosition (0);
-    rightEncoder.setPosition(0);
+    leftEncoder.reset();
+    rightEncoder.reset();
 
-    rightEncoder.setPositionConversionFactor(DriveConstants.kLinearDistanceConversionFactor);
-    leftEncoder.setPositionConversionFactor(DriveConstants.kLinearDistanceConversionFactor);
-    rightEncoder.setVelocityConversionFactor(DriveConstants.kLinearDistanceConversionFactor / 60);
-    leftEncoder.setVelocityConversionFactor(DriveConstants.kLinearDistanceConversionFactor / 60);
+    // no longer needed since using quadrature encoders
+    // rightEncoder.setPositionConversionFactor(DriveConstants.kLinearDistanceConversionFactor);
+    // leftEncoder.setPositionConversionFactor(DriveConstants.kLinearDistanceConversionFactor);
+    // rightEncoder.setVelocityConversionFactor(DriveConstants.kLinearDistanceConversionFactor / 60);
+    // leftEncoder.setVelocityConversionFactor(DriveConstants.kLinearDistanceConversionFactor / 60);
 
+    
     LeftBack.follow(LeftFront);
     RightBack.follow(RightFront);
 
@@ -68,7 +71,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     LeftFront.setInverted(false);
     LeftBack.setInverted(false);
 
-
+    //reset and calibrate navx
     navX.reset();
     navX.calibrate();
     resetEncoders();
@@ -76,8 +79,39 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_odometry = new DifferentialDriveOdometry(navX.getRotation2d(), gyroOffset, gyroOffset);
     // m_odometry.resetPosition(new Pose2d(), navX.getRotation2d());
     setBreakMode();
+
+
+    //lots of encoder stuff below -----------------------------------------------------
+
+    // Configures the encoder to return a distance of 4 for every 256 pulses
+    // Also changes the units of getRate
+    rightEncoder.setDistancePerPulse(4.0/256.0);
+    leftEncoder.setDistancePerPulse(4.0/256.0);
+
+    // Configures the encoder to consider itself stopped after .1 seconds
+    rightEncoder.setMinRate(0.1);
+    leftEncoder.setMinRate(0.1);
+
+    // Configures the encoder to consider itself stopped when its rate is below 10
+    rightEncoder.setMinRate(10);
+    leftEncoder.setMinRate(10);
+
+    // Reverses the direction of the encoder
+    rightEncoder.setReverseDirection(false);
+    leftEncoder.setReverseDirection(false);
+
+    // Configures an encoder to average its period measurement over 5 samples
+    // Can be between 1 and 127 samples
+    rightEncoder.setSamplesToAverage(5);
+    leftEncoder.setSamplesToAverage(5);
   }
-  //coast mod
+  // end of lots of encoder stuff ----------------------------------------------------
+
+    
+
+
+
+  //coast mode
   public void setCoastMode() {
     LeftBack.setNeutralMode(NeutralMode.Coast);
     LeftFront.setNeutralMode(NeutralMode.Coast);
@@ -93,8 +127,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 //reset encoders
   public void resetEncoders() {
-    rightEncoder.setPosition(0);
-    leftEncoder.setPosition(0);
+    // Resets the encoder to read a distance of zero
+  leftEncoder.reset();
+  rightEncoder.reset();
     }
   public void arcadeDrive(double fwd, double rot) {
       differentialDrive.arcadeDrive(fwd, rot);
@@ -103,18 +138,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return m_odometry.getPoseMeters();
     }
     public double getRightEncoderPosition() {
-      return rightEncoder.getPosition();
+      return rightEncoder.getDistance();
     }
 
     public double getLeftEncoderPosition() {
-      return leftEncoder.getPosition();
+      return leftEncoder.getDistance();
     }
   
   public double getRightEncoderVelocity() {
-    return rightEncoder.getVelocity();
+    return rightEncoder.getDistance();
     }  
     public double getLeftEncoderVelocity() {
-      return leftEncoder.getVelocity();
+      return leftEncoder.getDistance();
     }
     
 
@@ -141,10 +176,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return ((getLeftEncoderPosition() + getRightEncoderPosition()) / 2.0);
       }
 
-      public RelativeEncoder getLeftEncoder() {
+      public Encoder getLeftEncoder() {
         return leftEncoder;
       }
-      public RelativeEncoder getRightEncoder() {
+      public Encoder getRightEncoder() {
         return rightEncoder;
       }
       public double getTurnRate() {
@@ -170,8 +205,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
 
     // This method will be called once per scheduler run
-      m_odometry.update(navX.getRotation2d(), leftEncoder.getPosition(),
-      rightEncoder.getPosition());
+      m_odometry.update(navX.getRotation2d(), leftEncoder.getDistance(),
+      rightEncoder.getDistance());
     
     SmartDashboard.putNumber("Left encoder value meters", getLeftEncoderPosition());
     SmartDashboard.putNumber("RIGHT encoder value meters", getRightEncoderPosition());

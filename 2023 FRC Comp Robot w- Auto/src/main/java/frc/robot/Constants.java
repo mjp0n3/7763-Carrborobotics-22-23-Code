@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -26,15 +27,18 @@ public final class Constants {
         //sensitivity for robot driving with joysticks
         public static final double maxdrivespeed = 0.75;
         public static final double maxturnspeed = 0.75;
-        //encoders
-         public static final int rightEncoder = 6; 
-         public static final int leftEncoder = 2;
-
-
+        // right encoder
+         public static final int rightEncoderA = 6;
+         public static final int rightEncoderB = 7; 
+        //left encoder
+         public static final int leftEncoderA = 4;
+         public static final int leftEncoderB = 5; 
+        //arm encoder (need to add this tho)
+         public static final int armEncoderA = 0;
+         public static final int armEncoderBA = 1;
 
     }
 
-        
     public static final class DriveConstants{
         //CisID constants
         public static final double ksVolts = 0;
@@ -78,4 +82,36 @@ public final class Constants {
         public static final int ArmLeftID = 0;
         public static final int ArmRightID = 9;
     }
+
+    //autonomous paths 
+    public static final class PathPlannerConstants  {
+
+        //Follow Trajectory Values
+        public static final int autoMaxVelocity = 3;
+        public static final int autoMaxAcceleration = 3;
+        
+        //2cube feeder side no climb auto
+        public static final String fs_2cubepath1 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube1.wpilib.json";
+        public static final String fs_2cubepath2 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube2.wpilib.json";
+        public static final String fs_2cubepath3 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube3.wpilib.json";
+        public static final String fs_2cubepath4 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube4.wpilib.json";
+        public static final String fs_2cubepath5 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube5.wpilib.json";
+       
+        //1 cube 1 pickup other side climb auto
+        public static final String os_cclimbpath1 = "src/main/deploy/deploy/pathplanner/generatedJSON/OS_CClimb1.wpilib.json";
+        public static final String os_cclimbpath2 = "src/main/deploy/deploy/pathplanner/generatedJSON/OS_CClimb2.wpilib.json";
+        public static final String os_cclimbpath3 = "src/main/deploy/deploy/pathplanner/generatedJSON/OS_CClimb3.wpilib.json";
+        public static final String os_cclimbpath4 = "src/main/deploy/deploy/pathplanner/generatedJSON/OS_CClimb4.wpilib.json";
+        public static final String os_cclimbpath5 = "src/main/deploy/deploy/pathplanner/generatedJSON/OS_CClimb5.wpilib.json";
+    }
+    //Charge Station Balance PID values
+    public static final class Balanceconstants  {
+
+        public static final int kP_balance = 0;
+
+        public static final int kI_balance = 0;
+
+        public static final int kD_balance = 0;
+    }
+    
 }
