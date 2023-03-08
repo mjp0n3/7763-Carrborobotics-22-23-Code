@@ -46,6 +46,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private final DifferentialDriveOdometry m_odometry;
 
+  static AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+
+
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
     LeftBack.configFactoryDefault();
@@ -72,8 +75,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     LeftBack.setInverted(false);
 
     //reset and calibrate navx
-    navX.reset();
-    navX.calibrate();
+    m_gyro.reset();
+    m_gyro.calibrate();
     resetEncoders();
 
     m_odometry = new DifferentialDriveOdometry(navX.getRotation2d(), gyroOffset, gyroOffset);
@@ -183,19 +186,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return rightEncoder;
       }
       public double getTurnRate() {
-        return -navX.getRate();
+        return -m_gyro.getRate();
       }
     
       public static double getHeading() {
-        return navX.getRotation2d().getDegrees();
+        return m_gyro.getRotation2d().getDegrees();
       }
       public void setMaxOutput (double maxOutput) {
         differentialDrive.setMaxOutput(maxOutput);
       }
 
       public static void zeroHeading()  {
-        navX.calibrate();
-        navX.reset();
+        m_gyro.calibrate();
+        m_gyro.reset();
       }
       public Gyro getGyro() {
         return getGyro();

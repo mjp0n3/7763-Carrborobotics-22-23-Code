@@ -31,16 +31,18 @@ public class DriveCommand extends CommandBase {
   public void initialize() {
     System.out.println("starting drive command");
   }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double forwardSpeed = RobotContainer.joystick.getX() *Constants.DrivetrainConstants.maxdrivespeed;
-    double turningSpeed = RobotContainer.joystick.getY()*Constants.DrivetrainConstants.maxturnspeed;
+    
+
+    double forwardSpeed = RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * Constants.DrivetrainConstants.maxturnspeed;
+    double turningSpeed = RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * Constants.DrivetrainConstants.maxdrivespeed;
     drivetrainSubsystem.arcadeDrive(forwardSpeed, turningSpeed);
     //update this to match the axis in driverstation
   }
 
+  
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}

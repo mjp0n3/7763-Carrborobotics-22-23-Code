@@ -25,8 +25,8 @@ public final class Constants {
         public static final int LeftFrontID = 7; //motor 1
         public static final int LeftBackID = 1;  //motor 2
         //sensitivity for robot driving with joysticks
-        public static final double maxdrivespeed = 0.75;
-        public static final double maxturnspeed = 0.75;
+        public static final double maxdrivespeed = 0.70;
+        public static final double maxturnspeed = 0.250;
         // right encoder
          public static final int rightEncoderA = 6;
          public static final int rightEncoderB = 7; 

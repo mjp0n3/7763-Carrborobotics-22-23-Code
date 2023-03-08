@@ -25,10 +25,13 @@ import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;
 import frc.robot.commands.LowerToGroundCommand;
 import frc.robot.commands.RaiseToHighCommand;
+import frc.robot.commands.AUTO.FS_2CubeAutoCommand;
+import frc.robot.commands.AUTO.OS_CClimbAutoCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -59,7 +62,12 @@ public class RobotContainer {
   private final LowerToGroundCommand lowertogroundCommand = new LowerToGroundCommand(armsubsystem);
   //arm up command
   private final RaiseToHighCommand raisetohighCommand = new RaiseToHighCommand(armsubsystem);
+  //fs 2cube auto command
+  private final FS_2CubeAutoCommand fS_2CubeAutoCommand = new FS_2CubeAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
+  //os 1 cube climb auto command
+  private final OS_CClimbAutoCommand  oS_CClimbAutoCommand = new OS_CClimbAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
 
+  // final Command oS_CClimbAutoCommand = new instantCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   // private final DriveCommand driveCommand = new DriveCommand(drivetrainsubsystem);
 
   public static Joystick joystick = new Joystick (Constants.JoystickAxis1);
@@ -73,7 +81,7 @@ public class RobotContainer {
 
 
   //sendable chooser
-  SendableChooser<Command> chooser = new SendableChooser<>();
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   public RobotContainer() {
 
@@ -82,22 +90,21 @@ public class RobotContainer {
     configureButtonBindings();
     drivetrainsubsystem.setDefaultCommand(driveCommand);
     //buttons
-    xbutton.whileTrue(grabbergrabCommand);
-    abutton.whileTrue(grabberreleaseCommand);
-    zbutton.whileTrue(lowertogroundCommand);
-    bbutton.whileTrue(raisetohighCommand);
+    xbutton.whileTrue(lowertogroundCommand);
+    abutton.whileTrue(raisetohighCommand);
+    // zbutton.whileTrue(lowertogroundCommand);
+    // bbutton.whileTrue(raisetohighCommand);
     // ybutton.whileHeld(armCommand);
     
+    //uncomment for the auto selector 
 
-    //options for autonomous
-    chooser.addOption("curvy path", loadPathPlannerTrajectoryToRamseteCommand(
-      "/Users/micha/ROBOTICS/7763 2023 Comp Bot/7763 Pro-Bot-Imported/src/main/deploy/deploy/pathplanner/generatedJSON/Curved.wpilib.json",
-       true));
-    chooser.addOption("straight", loadPathPlannerTrajectoryToRamseteCommand(
-      "C:/Users/micha/ROBOTICS/7763 2023 Comp Bot/7763 Pro-Bot-Imported/src/main/deploy/deploy/pathplanner/generatedJSON/Straight.wpilib.json",
-      true));
 
-    Shuffleboard.getTab("Autonomous").add(chooser);
+    // autoChooser.setDefaultOption(only score);
+    autoChooser.addOption("fs 2 cube auto", fS_2CubeAutoCommand);
+    autoChooser.addOption("os 1 cube+pickup+climb auto", oS_CClimbAutoCommand);
+
+    //shuffleboard autonomous chooser
+    Shuffleboard.getTab("Autonomous").add(autoChooser);
 
   }
 
@@ -149,7 +156,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return chooser.getSelected();
+    return autoChooser.getSelected();
   }
   
 }
