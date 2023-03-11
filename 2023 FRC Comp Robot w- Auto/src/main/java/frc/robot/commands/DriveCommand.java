@@ -35,10 +35,10 @@ public class DriveCommand extends CommandBase {
   @Override
   public void execute() {
     
-
-    double forwardSpeed = RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * Constants.DrivetrainConstants.maxturnspeed;
-    double turningSpeed = RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * Constants.DrivetrainConstants.maxdrivespeed;
-    drivetrainSubsystem.arcadeDrive(forwardSpeed, turningSpeed);
+    //this is actually reversed :), turn speed is drive speed
+    double forwardSpeed = RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * RobotContainer.joystick.getX() *.75;
+    double turningSpeed = RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * RobotContainer.joystick.getY()  ;
+    drivetrainSubsystem.curvatureDrive(forwardSpeed, turningSpeed);
     //update this to match the axis in driverstation
   }
 

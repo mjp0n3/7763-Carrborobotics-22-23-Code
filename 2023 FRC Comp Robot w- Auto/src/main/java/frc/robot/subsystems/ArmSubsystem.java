@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -39,6 +41,12 @@ public class ArmSubsystem extends SubsystemBase {
   //arm down
   public void setArmDown() {
     armControllerGroup.set(-.50);
+  }
+
+  //arm break mode
+  public void setArmBreak() {
+    ArmLeft.setNeutralMode(NeutralMode.Brake);
+    ArmRight.setNeutralMode(NeutralMode.Brake);
   }
 
   //arm off

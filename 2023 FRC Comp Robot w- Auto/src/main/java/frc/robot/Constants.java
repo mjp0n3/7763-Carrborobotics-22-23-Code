@@ -26,34 +26,37 @@ public final class Constants {
         public static final int LeftBackID = 1;  //motor 2
         //sensitivity for robot driving with joysticks
         public static final double maxdrivespeed = 0.70;
-        public static final double maxturnspeed = 0.250;
+        public static final double maxturnspeed = 0.70;
         // right encoder
-         public static final int rightEncoderA = 6;
-         public static final int rightEncoderB = 7; 
+         public static final int rightEncoderA = 2;
+         public static final int rightEncoderB = 3; 
         //left encoder
-         public static final int leftEncoderA = 4;
-         public static final int leftEncoderB = 5; 
+         public static final int leftEncoderA = 6;
+         public static final int leftEncoderB = 7; 
         //arm encoder (need to add this tho)
          public static final int armEncoderA = 0;
-         public static final int armEncoderBA = 1;
+         public static final int armEncoderBA = 18;
 
     }
 
     public static final class DriveConstants{
-        //CisID constants
-        public static final double ksVolts = 0;
-        public static final double kvVoltSecondsPerMeter = 0;
-        public static final double kaVoltSecondsSquaredPerMeter = 0;
-        public static final double kPDriveVel = 0;
+        //CisID constant
+        public static final double ksVolts = 0.99606;
+        public static final double kvVoltSecondsPerMeter = 366.2;
+        public static final double kaVoltSecondsSquaredPerMeter = 132.93;
+        public static final double kPDriveVel = 25.418;
         
-        public static final double kTrackWidthMeters = Units.inchesToMeters(23);
+        public static final double kTrackWidthMeters = Units.inchesToMeters(21.25);
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
                 kTrackWidthMeters);
             
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
 
-        public static final double kGearRatio = 10.71;
+        public static final double kGearRatio = 12.75;
         public static final double kWheelRadiusInches = 6;
 
         public static final double kLinearDistanceConversionFactor = (Units.inchesToMeters(1 / (kGearRatio * 2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches)) * 10));
@@ -90,7 +93,7 @@ public final class Constants {
         public static final int autoMaxVelocity = 3;
         public static final int autoMaxAcceleration = 3;
         
-        //2cube feeder side no climb auto
+        //2cube feeder side no climb auto           
         public static final String fs_2cubepath1 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube1.wpilib.json";
         public static final String fs_2cubepath2 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube2.wpilib.json";
         public static final String fs_2cubepath3 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube3.wpilib.json";

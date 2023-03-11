@@ -30,8 +30,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    WPI_TalonSRX LeftBack = new WPI_TalonSRX(Constants.DrivetrainConstants.LeftBackID);
 
    //update the ports to be in constants later
-   Encoder leftEncoder = new Encoder(4, 5, false, Encoder.EncodingType.k2X); 
-   Encoder rightEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k2X); 
+   Encoder leftEncoder = new Encoder(DrivetrainConstants.rightEncoderA, DrivetrainConstants.rightEncoderB, false, Encoder.EncodingType.k2X); 
+   Encoder rightEncoder = new Encoder(DrivetrainConstants.leftEncoderA, DrivetrainConstants.leftEncoderB, true, Encoder.EncodingType.k2X); 
 
 
   MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
@@ -134,7 +134,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   leftEncoder.reset();
   rightEncoder.reset();
     }
-  public void arcadeDrive(double fwd, double rot) {
+  public void curvatureDrive(double fwd, double rot) {
       differentialDrive.arcadeDrive(fwd, rot);
     }
   public Pose2d getPose() {
@@ -179,6 +179,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return ((getLeftEncoderPosition() + getRightEncoderPosition()) / 2.0);
       }
 
+        
       public Encoder getLeftEncoder() {
         return leftEncoder;
       }
@@ -215,5 +216,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RIGHT encoder value meters", getRightEncoderPosition());
     SmartDashboard.putNumber("Gyro heading", getHeading());
   }
+
+
+
+
+
+  
 
 }

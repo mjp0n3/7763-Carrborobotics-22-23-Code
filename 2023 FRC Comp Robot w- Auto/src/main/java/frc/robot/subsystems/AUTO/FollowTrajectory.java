@@ -45,6 +45,7 @@ public class FollowTrajectory extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
     new DifferentialDriveVoltageConstraint(

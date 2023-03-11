@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.Arm_Maintain_HeightCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;
@@ -66,6 +67,9 @@ public class RobotContainer {
   private final FS_2CubeAutoCommand fS_2CubeAutoCommand = new FS_2CubeAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   //os 1 cube climb auto command
   private final OS_CClimbAutoCommand  oS_CClimbAutoCommand = new OS_CClimbAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
+  //arm maintain height command
+  private final Arm_Maintain_HeightCommand  arm_Maintain_HeightCommand = new Arm_Maintain_HeightCommand(armsubsystem);
+
 
   // final Command oS_CClimbAutoCommand = new instantCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   // private final DriveCommand driveCommand = new DriveCommand(drivetrainsubsystem);
@@ -73,8 +77,9 @@ public class RobotContainer {
   public static Joystick joystick = new Joystick (Constants.JoystickAxis1);
   JoystickButton abutton = new JoystickButton(joystick, Constants.ButtonA);
   JoystickButton xbutton = new JoystickButton(joystick, Constants.ButtonX);
-  JoystickButton zbutton = new JoystickButton(joystick, Constants.ButtonZ);
+  JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonZ);
   JoystickButton bbutton = new JoystickButton(joystick, Constants.ButtonB);
+
   // JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonY);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -90,11 +95,12 @@ public class RobotContainer {
     configureButtonBindings();
     drivetrainsubsystem.setDefaultCommand(driveCommand);
     //buttons
-    xbutton.whileTrue(lowertogroundCommand);
-    abutton.whileTrue(raisetohighCommand);
-    // zbutton.whileTrue(lowertogroundCommand);
-    // bbutton.whileTrue(raisetohighCommand);
-    // ybutton.whileHeld(armCommand);
+    abutton.whileTrue(lowertogroundCommand);
+    xbutton.whileTrue(raisetohighCommand);
+    ybutton.whileTrue(fS_2CubeAutoCommand);
+    bbutton.whileTrue(arm_Maintain_HeightCommand);
+    // zbutton.whileTrue(raisetohighCommand);
+
     
     //uncomment for the auto selector 
 
