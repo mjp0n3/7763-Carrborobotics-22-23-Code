@@ -40,7 +40,7 @@ public class FollowTrajectory extends CommandBase {
 
     this.pathName = pathName;
     this.zeroInitialPose = zeroInitialPose;
-     trajectoryToFollow = PathPlanner.loadPath("PathPlannerConstants.", new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
+     trajectoryToFollow = PathPlanner.loadPath("FS_2Cube.", new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
   }
  
   
