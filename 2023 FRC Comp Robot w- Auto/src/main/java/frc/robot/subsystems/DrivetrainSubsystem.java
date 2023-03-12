@@ -209,7 +209,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
 
     // This method will be called once per scheduler run
-      m_odometry.update(navX.getRotation2d(), leftEncoder.getDistance(),
+      m_odometry.update(m_gyro.getRotation2d(), leftEncoder.getDistance(),
       rightEncoder.getDistance());
     
     SmartDashboard.putNumber("Left encoder value meters", getLeftEncoderPosition());

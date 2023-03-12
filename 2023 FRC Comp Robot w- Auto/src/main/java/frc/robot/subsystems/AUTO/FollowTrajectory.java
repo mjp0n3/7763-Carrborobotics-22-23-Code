@@ -7,6 +7,8 @@ package frc.robot.subsystems.AUTO;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
@@ -29,7 +31,7 @@ public class FollowTrajectory extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private String pathName;
   private boolean zeroInitialPose;
-
+  private PathPlannerTrajectory trajectoryToFollow;
   /** Creates a new FollowTrajectory. */
   /** Creates a new FollowTrajectoryPathPlanner. */
   public FollowTrajectory(DrivetrainSubsystem drivetrainSubsystem, String pathName, boolean zeroInitialPose) {
@@ -38,14 +40,14 @@ public class FollowTrajectory extends CommandBase {
 
     this.pathName = pathName;
     this.zeroInitialPose = zeroInitialPose;
-  
+     trajectoryToFollow = PathPlanner.loadPath("PathPlannerConstants.", new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
   }
-
+ 
   
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
     new DifferentialDriveVoltageConstraint(
@@ -63,15 +65,26 @@ public class FollowTrajectory extends CommandBase {
         .setKinematics(DriveConstants.kDriveKinematics)
         // Apply the voltage constraint
         .addConstraint(autoVoltageConstraint);
-      // Makes a trajectory                                                     
-      PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration);
+      // Makes a trajectory                                change this if it works back to pathName \/
+      
+//nothing
+
+   
+      //loads the paths (from east and i changed some stuff to be like theirs with the new pathconstraints stuff)
+      // PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath("Auto Balance", new PathConstraints(3, 3));
+
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
-    drivetrainSubsystem.resetOdometry(trajectoryToFollow.getInitialPose() 
-    );
+    // // drivetrainSubsystem.resetOdometry(trajectoryToFollow.getInitialPose() 
+    // );
     
     }
-
+    // // PID controllers
+    //   PIDController xController = new PIDController(PathPlannerConstants.kPXController, 0, 0);
+    //   PIDController yController = new PIDController(PathPlannerConstants.kPYController, 0, 0);
+    //   ProfiledPIDController thetaController = new ProfiledPIDController(
+    //   PathPlannerConstants.kPThetaController, 0, 0, PathPlannerConstants.kThetaControllerConstraints);
+    //   thetaController.enableContinuousInput(-Math.PI, Math.PI); // Makes it so wheels don't have to turn more than 90 degrees
       
 
             // Create config for trajectory

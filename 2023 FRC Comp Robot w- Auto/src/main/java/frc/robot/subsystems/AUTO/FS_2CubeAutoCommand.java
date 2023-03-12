@@ -31,7 +31,7 @@ public class FS_2CubeAutoCommand extends ParallelCommandGroup {
 
     //  1. Backs up 
     new ParallelCommandGroup(
-            new FollowTrajectory(drivetrainSubsystem, PathPlannerConstants.fs_2cubepath1, true)
+            new FollowTrajectory(drivetrainSubsystem, "FS_2Cube1", true)
   ).withTimeout(2),
 
 
@@ -66,6 +66,7 @@ public class FS_2CubeAutoCommand extends ParallelCommandGroup {
     new ParallelCommandGroup(
       new FollowTrajectory(drivetrainSubsystem, PathPlannerConstants.fs_2cubepath4, false),
       new GrabberGrabCommand(grabberSubsystem)
+      
   ).withTimeout(0.5),
 
 

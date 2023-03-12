@@ -62,8 +62,8 @@ public class FollowTrajectory extends CommandBase {
         .setKinematics(DriveConstants.kDriveKinematics)
         // Apply the voltage constraint
         .addConstraint(autoVoltageConstraint);
-      // Makes a trajectory                                                     
-      PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration);
+      // Makes a trajectory                                       //change to actual path name    
+      PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath("src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube1.wpilib.json", PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration);
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
     drivetrainSubsystem.resetOdometry(trajectoryToFollow.getInitialPose() 

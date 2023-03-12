@@ -94,11 +94,11 @@ public final class Constants {
         public static final int autoMaxAcceleration = 3;
         
         //2cube feeder side no climb auto           
-        public static final String fs_2cubepath1 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube1.wpilib.json";
-        public static final String fs_2cubepath2 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube2.wpilib.json";
-        public static final String fs_2cubepath3 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube3.wpilib.json";
-        public static final String fs_2cubepath4 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube4.wpilib.json";
-        public static final String fs_2cubepath5 = "src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube5.wpilib.json";
+        public static final String fs_2cubepath1 = "FS_2Cube1";
+        public static final String fs_2cubepath2 = "FS_2Cube2";
+        public static final String fs_2cubepath3 = "FS_2Cube3";
+        public static final String fs_2cubepath4 = "FS_2Cube4";
+        public static final String fs_2cubepath5 = "FS_2Cube5";
        
         //1 cube 1 pickup other side climb auto
         public static final String os_cclimbpath1 = "src/main/deploy/deploy/pathplanner/generatedJSON/OS_CClimb1.wpilib.json";

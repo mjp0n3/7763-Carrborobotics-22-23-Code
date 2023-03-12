@@ -1,1 +1,37 @@
-{}
+{
+  "HALProvider": {
+    "Encoders": {
+      "0": {
+        "header": {
+          "open": true
+        }
+      },
+      "1": {
+        "header": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": true
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser"
+    },
+    "windows": {
+      "/Shuffleboard/Autonomous/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    }
+  }
+}
