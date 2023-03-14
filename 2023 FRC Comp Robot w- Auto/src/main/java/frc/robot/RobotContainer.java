@@ -7,6 +7,8 @@ package frc.robot;
 import java.io.IOException;
 import java.nio.file.Path;
 
+
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -32,9 +34,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -75,10 +77,16 @@ public class RobotContainer {
   // private final DriveCommand driveCommand = new DriveCommand(drivetrainsubsystem);
 
   public static Joystick joystick = new Joystick (Constants.JoystickAxis1);
+  public static Joystick operatorjoystick = new Joystick (Constants.JoystickAxis2);
+  // public static Joystick joystick1 = new Joystick (Constants.JoystickAxis3);
   JoystickButton abutton = new JoystickButton(joystick, Constants.ButtonA);
   JoystickButton xbutton = new JoystickButton(joystick, Constants.ButtonX);
-  JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonZ);
+  JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonY);
   JoystickButton bbutton = new JoystickButton(joystick, Constants.ButtonB);
+  JoystickButton backbutton = new JoystickButton(joystick, Constants.ButtonBack);
+  JoystickButton fwdbutton = new JoystickButton(joystick, Constants.ButtonFwd);
+  JoystickButton tlbutton = new JoystickButton(joystick, Constants.ButtonTL);
+  JoystickButton trbutton = new JoystickButton(joystick, Constants.ButtonTR);
 
   // JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonY);
 
@@ -97,17 +105,25 @@ public class RobotContainer {
     //buttons
     abutton.whileTrue(lowertogroundCommand);
     xbutton.whileTrue(raisetohighCommand);
-    bbutton.whileTrue(fS_2CubeAutoCommand);
-    ybutton.whileTrue(arm_Maintain_HeightCommand);
-    // zbutton.whileTrue(raisetohighCommand);
+    // bbutton.whileTrue(fS_2CubeAutoCommand);
+    // ybutton.whileTrue();
+    // fwdbutton.whileTrue(arm_Maintain_HeightCommand);
+    // backbutton.whileTrue();
+
+    //intake / outake cube/cone with RB and LB
+    bbutton.onTrue(new InstantCommand(() -> grabbersubsystem.IntakeCube()));
+    ybutton.onTrue(new InstantCommand(() -> grabbersubsystem.OutakeCube()));
+    // smtnbutton.onTrue(new InstantCommand(() -> grabbersubsystem.IntakeCone()));
+    // smtnbutton.onTrue(new InstantCommand(() -> grabbersubsystem.OutakeCone()));
+
 
     
     //uncomment for the auto selector 
 
 
     // autoChooser.setDefaultOption(only score);
-    autoChooser.addOption("fs 2 cube auto", fS_2CubeAutoCommand);
-    autoChooser.addOption("os 1 cube+pickup+climb auto", oS_CClimbAutoCommand);
+    // autoChooser.addOption("fs 2 cube auto", fS_2CubeAutoCommand);
+    // autoChooser.addOption("os 1 cube+pickup+climb auto", oS_CClimbAutoCommand);
 
     //shuffleboard autonomous chooser
     Shuffleboard.getTab("Autonomous").add(autoChooser);
@@ -161,8 +177,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return autoChooser.getSelected();
-  }
-  
+    return new RunCommand(() -> drivetrainsubsystem.arcadeDrive(1, 0));
+  //   // An ExampleCommand will run in autonomous
+  //   return autoChooser.getSelected();
+      // Create a voltage constraint to ensure we don't accelerate too fast  
 }
+ }

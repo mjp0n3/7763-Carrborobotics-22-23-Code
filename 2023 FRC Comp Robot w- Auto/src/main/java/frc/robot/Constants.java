@@ -6,7 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -31,11 +36,9 @@ public final class Constants {
          public static final int rightEncoderA = 2;
          public static final int rightEncoderB = 3; 
         //left encoder
-         public static final int leftEncoderA = 6;
-         public static final int leftEncoderB = 7; 
-        //arm encoder (need to add this tho)
-         public static final int armEncoderA = 0;
-         public static final int armEncoderBA = 18;
+         public static final int leftEncoderA = 4;
+         public static final int leftEncoderB = 5; 
+
 
     }
 
@@ -65,11 +68,23 @@ public final class Constants {
     }
     
     public static final int JoystickAxis1 = 0;
-    public static final int ButtonA = 1;
+    public static final int JoystickAxis2 = 1;
+    public static final int ButtonA = 1; //up
     public static final int ButtonB = 2;
-    public static final int ButtonX = 3;
-    public static final int ButtonY= 4;
-    public static final int ButtonZ= 5;
+    public static final int ButtonX = 3; //down
+    public static final int ButtonY= 5;
+    public static final int ButtonTL= 6;
+    public static final int ButtonTR= 7;
+    public static final int ButtonBack= 8;
+    public static final int ButtonFwd= 9;
+
+
+
+    // public static final JoystickButton driverBumperLeft = new JoystickButton(JoystickAxis1, 5);
+    // public static final JoystickButton driverBumperRight = new JoystickButton(JoystickAxis1, 6);
+    
+    
+
 
     public static final class ElectronicsConstants {
         public static PneumaticsModuleType kPneumaticsModuleType = PneumaticsModuleType.REVPH;
@@ -79,11 +94,15 @@ public final class Constants {
         //solenoid ports
         public static final int GrabberDeployedPort = 2;
         public static final int GrabberRetractedPort = 3;
+        //intake motors
+        public static final int RightIntakeMotor = 3;
+        public static final int LeftIntakeMotor = 4;
     }
     public static final class ArmConstants {
         //arm motor ports (change)
-        public static final int ArmLeftID = 0;
-        public static final int ArmRightID = 9;
+        public static final int ArmRightID = 0;
+        // public static final int ArmLeftID = 69;
+        public static final int ArmEncoder = (1);
     }
 
     //autonomous paths 
@@ -116,5 +135,17 @@ public final class Constants {
 
         public static final int kD_balance = 0;
     }
-    
+
+
+    public static final class FeedforwardConstants  {
+
+        public static final int KsFeedForwardValue = 0;
+
+        public static final int KvFeedForwardValue = 0;
+
+        public static final int KaFeedForwardValue = 0;
+        
+        public static final int KgFeedForwardValue = 0;
+
+    }
 }

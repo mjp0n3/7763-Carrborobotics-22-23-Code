@@ -7,6 +7,8 @@ package frc.robot.commands.AUTO;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
@@ -63,7 +65,7 @@ public class FollowTrajectory extends CommandBase {
         // Apply the voltage constraint
         .addConstraint(autoVoltageConstraint);
       // Makes a trajectory                                       //change to actual path name    
-      PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath("src/main/deploy/deploy/pathplanner/generatedJSON/FS_2Cube1.wpilib.json", PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration);
+      PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath("FS_2Cube1", new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
     drivetrainSubsystem.resetOdometry(trajectoryToFollow.getInitialPose() 
@@ -125,8 +127,9 @@ public class FollowTrajectory extends CommandBase {
   // }
 
   // Run path following command, then stop at the end.
+  
   ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
-  return;
+
 
 }
 }

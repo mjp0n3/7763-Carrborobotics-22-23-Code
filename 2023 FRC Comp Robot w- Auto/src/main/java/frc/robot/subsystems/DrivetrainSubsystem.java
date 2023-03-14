@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -134,7 +136,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   leftEncoder.reset();
   rightEncoder.reset();
     }
-  public void curvatureDrive(double fwd, double rot) {
+  public void arcadeDrive(double fwd, double rot) {
       differentialDrive.arcadeDrive(fwd, rot);
     }
   public Pose2d getPose() {
@@ -205,6 +207,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return getGyro();
       }
 
+      //get elevation angle, might need to be ajusted
+    public double getElevationAngle() {
+      return m_gyro.getPitch(); // ← angle around x-axis
+    }
+    
+      
     @Override
     public void periodic() {
 
@@ -215,7 +223,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Left encoder value meters", getLeftEncoderPosition());
     SmartDashboard.putNumber("RIGHT encoder value meters", getRightEncoderPosition());
     SmartDashboard.putNumber("Gyro heading", getHeading());
+    
   }
+
+
+
+
+
 
 
 
