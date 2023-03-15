@@ -7,8 +7,6 @@ package frc.robot.commands.AUTO;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.RaiseToHighCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;

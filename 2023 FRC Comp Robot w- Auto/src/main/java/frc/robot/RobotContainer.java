@@ -22,19 +22,21 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.Arm_Maintain_HeightCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;
 import frc.robot.commands.LowerToGroundCommand;
 import frc.robot.commands.RaiseToHighCommand;
+import frc.robot.commands.AUTO.AutoSelector;
 import frc.robot.commands.AUTO.FS_2CubeAutoCommand;
+import frc.robot.commands.AUTO.FollowTrajectory;
 import frc.robot.commands.AUTO.OS_CClimbAutoCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -69,9 +71,8 @@ public class RobotContainer {
   private final FS_2CubeAutoCommand fS_2CubeAutoCommand = new FS_2CubeAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   //os 1 cube climb auto command
   private final OS_CClimbAutoCommand  oS_CClimbAutoCommand = new OS_CClimbAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
-  //arm maintain height command
-  private final Arm_Maintain_HeightCommand  arm_Maintain_HeightCommand = new Arm_Maintain_HeightCommand(armsubsystem);
-
+  //auto selector command command
+  private final frc.robot.commands.AUTO.AutoSelector  AutoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
 
   // final Command oS_CClimbAutoCommand = new instantCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   // private final DriveCommand driveCommand = new DriveCommand(drivetrainsubsystem);
@@ -85,23 +86,27 @@ public class RobotContainer {
   JoystickButton bbutton = new JoystickButton(joystick, Constants.ButtonB);
   JoystickButton backbutton = new JoystickButton(joystick, Constants.ButtonBack);
   JoystickButton fwdbutton = new JoystickButton(joystick, Constants.ButtonFwd);
-  JoystickButton tlbutton = new JoystickButton(joystick, Constants.ButtonTL);
-  JoystickButton trbutton = new JoystickButton(joystick, Constants.ButtonTR);
+  JoystickButton lbbutton = new JoystickButton(joystick, Constants.ButtonLB);
+  JoystickButton rbbutton = new JoystickButton(joystick, Constants.ButtonRB);
 
   // JoystickButton ybutton = new JoystickButton(joystick, Constants.ButtonY);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
 
 
-  //sendable chooser
-  SendableChooser<Command> autoChooser = new SendableChooser<>();
+  //auto selector
+  AutoSelector autoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
 
-  public RobotContainer() {
-
+  public RobotContainer() { 
+    autoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   
     // Configure the button bindings
     configureButtonBindings();
-    drivetrainsubsystem.setDefaultCommand(driveCommand);
+    drivetrainsubsystem.setDefaultCommand(new RunCommand(() -> drivetrainsubsystem.arcadeDrive(
+      RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * RobotContainer.joystick.getX() *.75,
+      RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * RobotContainer.joystick.getY())
+      , drivetrainsubsystem
+    ));
     //buttons
     abutton.whileTrue(lowertogroundCommand);
     xbutton.whileTrue(raisetohighCommand);
@@ -109,24 +114,24 @@ public class RobotContainer {
     // ybutton.whileTrue();
     // fwdbutton.whileTrue(arm_Maintain_HeightCommand);
     // backbutton.whileTrue();
-
+    //
     //intake / outake cube/cone with RB and LB
-    bbutton.onTrue(new InstantCommand(() -> grabbersubsystem.IntakeCube()));
-    ybutton.onTrue(new InstantCommand(() -> grabbersubsystem.OutakeCube()));
+    lbbutton.whileTrue(new InstantCommand(() -> grabbersubsystem.IntakeCube()));
+    lbbutton.whileFalse(new InstantCommand(() -> grabbersubsystem.Intakeoff()));
+    rbbutton.whileTrue(new InstantCommand(() -> grabbersubsystem.OutakeCube()));
+    rbbutton.whileFalse(new InstantCommand(() -> grabbersubsystem.Intakeoff()));
     // smtnbutton.onTrue(new InstantCommand(() -> grabbersubsystem.IntakeCone()));
     // smtnbutton.onTrue(new InstantCommand(() -> grabbersubsystem.OutakeCone()));
 
 
-    
-    //uncomment for the auto selector 
 
 
-    // autoChooser.setDefaultOption(only score);
-    // autoChooser.addOption("fs 2 cube auto", fS_2CubeAutoCommand);
-    // autoChooser.addOption("os 1 cube+pickup+climb auto", oS_CClimbAutoCommand);
 
-    //shuffleboard autonomous chooser
-    Shuffleboard.getTab("Autonomous").add(autoChooser);
+
+
+
+
+
 
   }
 
@@ -177,9 +182,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new RunCommand(() -> drivetrainsubsystem.arcadeDrive(1, 0));
-  //   // An ExampleCommand will run in autonomous
-  //   return autoChooser.getSelected();
-      // Create a voltage constraint to ensure we don't accelerate too fast  
+    // return fS_2CubeAutoCommand;
+    return autoSelector.getSelected(); 
 }
  }

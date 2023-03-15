@@ -12,18 +12,13 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PathPlannerConstants;
-import frc.robot.subsystems.DrivetrainSubsystem;
+
 
 
 public class FollowTrajectory extends CommandBase {
@@ -31,6 +26,7 @@ public class FollowTrajectory extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private String pathName;
   private boolean zeroInitialPose;
+  boolean done = false;
 
   /** Creates a new FollowTrajectory. */
   /** Creates a new FollowTrajectoryPathPlanner. */
@@ -68,9 +64,7 @@ public class FollowTrajectory extends CommandBase {
       PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath("FS_2Cube1", new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
-    drivetrainSubsystem.resetOdometry(trajectoryToFollow.getInitialPose() 
-    );
-    
+      drivetrainSubsystem.resetOdometry(trajectoryToFollow.getInitialPose());
     }
 
       
@@ -85,15 +79,16 @@ public class FollowTrajectory extends CommandBase {
     //     // Apply the voltage constraint
     //     .addConstraint(autoVoltageConstraint);
 
-        RamseteCommand ramseteCommand = 
-        new RamseteCommand(trajectoryToFollow, drivetrainSubsystem::getPose,
-        new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
-        new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,
-            DriveConstants.kaVoltSecondsSquaredPerMeter),
-        DriveConstants.kDriveKinematics, drivetrainSubsystem::getWheelSpeeds,
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
-        new PIDController(DriveConstants.kPDriveVel, 0, 0), drivetrainSubsystem::tankDriveVolts,
-        drivetrainSubsystem);
+    // RamseteCommand ramseteCommand = 
+    //   new RamseteCommand(trajectoryToFollow, drivetrainSubsystem::getPose,
+    //   new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
+    //   new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,
+    //       DriveConstants.kaVoltSecondsSquaredPerMeter),
+    //   DriveConstants.kDriveKinematics, drivetrainSubsystem::getWheelSpeeds,
+    //   new PIDController(DriveConstants.kPDriveVel, 0, 0),
+    //   new PIDController(DriveConstants.kPDriveVel, 0, 0), drivetrainSubsystem::tankDriveVolts,
+    // drivetrainSubsystem)
+    //   .andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
 
     // Create a PPSwerveControllerCommand. This is almost identical to WPILib's SwerveControllerCommand, but it uses the holonomic rotation from the PathPlannerTrajectory to control the robot's rotation.
     // -----idk if we need this this may be only for swerve but i think we need something like this but for tank drive-----
@@ -108,13 +103,11 @@ public class FollowTrajectory extends CommandBase {
     //   drivetrainSubsystem
     // );
     
-    // followTrajectoryPathPlannerCommand.schedule();
+    // ramseteCommand.schedule();
+  }
     
-  // // Called every time the scheduler runs while the command is scheduled.
-  // @Override
-  // public void execute() {
-  //   done = followTrajectoryPathPlannerCommand.isFinished();
-  // }
+  // Called every time the scheduler runs while the command is scheduled.
+ 
 
   // // Called once the command ends or is interrupted.
   // @Override
@@ -126,10 +119,11 @@ public class FollowTrajectory extends CommandBase {
   //   return false;
   // }
 
+  // Called every time the scheduler runs while the command is scheduled.
+  // @Override
+  // public void execute() {
+  //   done = followTrajectoryPathPlannerCommand.isFinished();
+  // }
+
   // Run path following command, then stop at the end.
-  
-  ramseteCommand.andThen(() -> drivetrainSubsystem.tankDriveVolts(0, 0));
-
-
-}
 }

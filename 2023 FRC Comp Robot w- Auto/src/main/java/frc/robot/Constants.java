@@ -6,12 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycle;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -73,8 +69,8 @@ public final class Constants {
     public static final int ButtonB = 2;
     public static final int ButtonX = 3; //down
     public static final int ButtonY= 5;
-    public static final int ButtonTL= 6;
-    public static final int ButtonTR= 7;
+    public static final int ButtonLB=5;
+    public static final int ButtonRB= 6;
     public static final int ButtonBack= 8;
     public static final int ButtonFwd= 9;
 
@@ -103,6 +99,11 @@ public final class Constants {
         public static final int ArmRightID = 0;
         // public static final int ArmLeftID = 69;
         public static final int ArmEncoder = (1);
+        //need to update
+        public static final double kConversionFactor = 100;
+        public static final int kCurrentLimit = 1;
+        public static final double ksoftforwardlimit = 100;
+        public static final double ksoftreverselimit = 0;
     }
 
     //autonomous paths 
@@ -129,11 +130,19 @@ public final class Constants {
     //Charge Station Balance PID values
     public static final class Balanceconstants  {
 
-        public static final int kP_balance = 0;
+        // public static final int kP_balance = 0;
 
-        public static final int kI_balance = 0;
+        // public static final int kI_balance = 0;
 
-        public static final int kD_balance = 0;
+        // public static final int kD_balance = 0;
+
+        public static final double platformMaxAngle = 15;  //or maybe its 11.5? or maybe something else entirely lol
+
+        public static final double balanceSpeed = 0.07;  //might need to ajust
+
+        public static final double angleCoefficient = 1.5; //again, might need to ajust
+
+        
     }
 
 

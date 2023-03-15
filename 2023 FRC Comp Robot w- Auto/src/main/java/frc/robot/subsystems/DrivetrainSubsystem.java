@@ -8,8 +8,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.PathPlannerConstants;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -17,11 +23,15 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -34,7 +44,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    //update the ports to be in constants later
    Encoder leftEncoder = new Encoder(DrivetrainConstants.rightEncoderA, DrivetrainConstants.rightEncoderB, false, Encoder.EncodingType.k2X); 
    Encoder rightEncoder = new Encoder(DrivetrainConstants.leftEncoderA, DrivetrainConstants.leftEncoderB, true, Encoder.EncodingType.k2X); 
-
+  
 
   MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
   MotorControllerGroup leftControllerGroup = new MotorControllerGroup(LeftBack, LeftFront);
@@ -204,7 +214,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_gyro.reset();
       }
       public Gyro getGyro() {
-        return getGyro();
+        return m_gyro;
       }
 
       //get elevation angle, might need to be ajusted
@@ -226,15 +236,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
   }
 
+  public Command followTrajectoryCommand(String pathName, boolean zeroInitialPose) {
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
+    // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
+    if (zeroInitialPose) {
+      this.resetOdometry(trajectoryToFollow.getInitialPose());
+    }
 
+    // uncomment for errors abt ramsete lol
+    return new RamseteCommand(trajectoryToFollow, this::getPose,
+      new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
+      new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,
+          DriveConstants.kaVoltSecondsSquaredPerMeter),
+      DriveConstants.kDriveKinematics, this::getWheelSpeeds,
+      new PIDController(DriveConstants.kPDriveVel, 0, 0),
+      new PIDController(DriveConstants.kPDriveVel, 0, 0), this::tankDriveVolts,
+      this)
+        .andThen(() -> this.tankDriveVolts(0, 0));
 
-
-
-
-
-
-
-
-  
-
+   
+  }
 }

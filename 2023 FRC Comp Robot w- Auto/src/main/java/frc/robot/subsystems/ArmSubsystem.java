@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -32,27 +34,40 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     // ArmLeft.configFactoryDefault();
     ArmRight.configFactoryDefault();
+    ArmRight.setInverted(false);
 
-    // Configures the encoder to return a distance of 360 for every rotation
+    //setting some stuff up
     ArmEncoder.setDistancePerRotation(360); 
+    ArmRight.setInverted(false);
+    ArmRight.configPeakCurrentLimit(ArmConstants.kCurrentLimit);
+    ArmRight.configForwardSoftLimitThreshold(ArmConstants.ksoftforwardlimit, 0);
+    ArmRight.configReverseSoftLimitThreshold(ArmConstants.ksoftreverselimit, 0);
+    ArmRight.configForwardSoftLimitEnable(true, 0);
+    ArmRight.configReverseSoftLimitEnable(true, 0);
   }
+  double requestedSpeed = 0;
+
+  //get encoder position
+  public double getPosition() {
+    return ArmEncoder.getAbsolutePosition();
+  }
+
     //reset encoder
     public void resetarm() {
     ArmEncoder.reset();
-
+    }
     
-
-    ArmRight.setInverted(false);
-    // ArmLeft.setInverted(false);
-  }
-      //solenoid retract
+  
+  //arm up
   public void setArmHigh() {
     armControllerGroup.set(.50);
   }
   //arm down
   public void setArmDown() {
-    armControllerGroup.set(-.50);
+    armControllerGroup.set(-.20);
   }
+
+
 
   //arm break mode
   public void setArmBreak() {
@@ -108,7 +123,9 @@ public class ArmSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Arm encoder value meters", ArmEncoder.getDistance());
+    SmartDashboard.putNumber("Arm encoder value meters", ArmEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Applied Speed", ArmRight.getSupplyCurrent());
+    SmartDashboard.putNumber("Desired Speeed", requestedSpeed);
   }
 }
   

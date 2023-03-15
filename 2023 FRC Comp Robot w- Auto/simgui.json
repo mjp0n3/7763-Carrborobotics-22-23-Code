@@ -1,5 +1,10 @@
 {
   "HALProvider": {
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    },
     "Encoders": {
       "0": {
         "header": {
@@ -14,6 +19,11 @@
       "window": {
         "visible": true
       }
+    },
+    "RoboRIO": {
+      "window": {
+        "visible": true
+      }
     }
   },
   "NTProvider": {
@@ -22,6 +32,11 @@
       "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser"
     },
     "windows": {
+      "/FMSInfo": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/Autonomous/SendableChooser[0]": {
         "window": {
           "visible": true
@@ -33,5 +48,8 @@
     "Retained Values": {
       "open": false
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   }
 }

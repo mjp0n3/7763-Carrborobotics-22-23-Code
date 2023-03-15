@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -37,7 +36,7 @@ public class DriveCommand extends CommandBase {
     
     //this is actually reversed :), turn speed is drive speed
     double forwardSpeed = RobotContainer.joystick.getX() * RobotContainer.joystick.getX() * RobotContainer.joystick.getX() *.75;
-    double turningSpeed = RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * RobotContainer.joystick.getY()  ;
+    double turningSpeed = RobotContainer.joystick.getY() * RobotContainer.joystick.getY() * RobotContainer.joystick.getY();
     drivetrainSubsystem.arcadeDrive(forwardSpeed, turningSpeed);
     //update this to match the axis in driverstation
   }
