@@ -11,10 +11,14 @@ import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -23,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
   private static final double KsFeedForwardValue = 0;
 
     //motor controllers for arm declared here
-    WPI_TalonSRX ArmRight = new WPI_TalonSRX(Constants.ArmConstants.ArmRightID);
+    CANSparkMax ArmRight = new CANSparkMax(Constants.ArmConstants.ArmRightID, MotorType.kBrushed);
     // WPI_TalonSRX ArmLeft = new WPI_TalonSRX(Constants.ArmConstants.ArmLeftID);
   
     DutyCycleEncoder ArmEncoder = new DutyCycleEncoder(Constants.ArmConstants.ArmEncoder);
@@ -33,17 +37,19 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     // ArmLeft.configFactoryDefault();
-    ArmRight.configFactoryDefault();
+    ArmRight.restoreFactoryDefaults();
     ArmRight.setInverted(false);
 
     //setting some stuff up
     ArmEncoder.setDistancePerRotation(360); 
     ArmRight.setInverted(false);
-    ArmRight.configPeakCurrentLimit(ArmConstants.kCurrentLimit);
-    ArmRight.configForwardSoftLimitThreshold(ArmConstants.ksoftforwardlimit, 0);
-    ArmRight.configReverseSoftLimitThreshold(ArmConstants.ksoftreverselimit, 0);
-    ArmRight.configForwardSoftLimitEnable(true, 0);
-    ArmRight.configReverseSoftLimitEnable(true, 0);
+    // ArmRight.maxOutput(ArmConstants.kCurrentLimit);
+    ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.enabletreverselimit);
+    ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.enableforwardlimit);
+
+    // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.ksoftforwardlimit);
+    // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.ksoftreverselimit);
+
   }
   double requestedSpeed = 0;
 
@@ -60,11 +66,11 @@ public class ArmSubsystem extends SubsystemBase {
   
   //arm up
   public void setArmHigh() {
-    armControllerGroup.set(.50);
+    ArmRight.set(.60);
   }
   //arm down
   public void setArmDown() {
-    armControllerGroup.set(-.20);
+    ArmRight.set(-.60);
   }
 
 
@@ -72,12 +78,12 @@ public class ArmSubsystem extends SubsystemBase {
   //arm break mode
   public void setArmBreak() {
     // ArmLeft.setNeutralMode(NeutralMode.Brake);
-    ArmRight.setNeutralMode(NeutralMode.Brake);
+    ArmRight.setIdleMode(IdleMode.kBrake);
   }
    //arm normal mode
    public void setArmCoast() {
     // ArmLeft.setNeutralMode(NeutralMode.Coast);
-    ArmRight.setNeutralMode(NeutralMode.Coast);
+    ArmRight.setIdleMode(IdleMode.kCoast);
   }
 
   //arm off
@@ -124,7 +130,8 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Arm encoder value meters", ArmEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Applied Speed", ArmRight.getSupplyCurrent());
+    SmartDashboard.putNumber("Applied Speed", ArmRight.getAppliedOutput());
+    // SmartDashboard.putNumber("SparkMaxState", ArmRight.getIdleMode());
     SmartDashboard.putNumber("Desired Speeed", requestedSpeed);
   }
 }

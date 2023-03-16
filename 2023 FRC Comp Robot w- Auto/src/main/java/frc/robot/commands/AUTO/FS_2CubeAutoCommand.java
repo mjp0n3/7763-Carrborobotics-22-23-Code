@@ -4,13 +4,7 @@
 
 package frc.robot.commands.AUTO;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.PathPlannerConstants;
-import frc.robot.commands.GrabberGrabCommand;
-import frc.robot.commands.GrabberReleaseCommand;
-import frc.robot.commands.LowerToGroundCommand;
-import frc.robot.commands.RaiseToHighCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;

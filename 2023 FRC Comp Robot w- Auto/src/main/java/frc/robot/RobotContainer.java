@@ -109,7 +109,7 @@ public class RobotContainer {
     ));
     //buttons
     abutton.whileTrue(lowertogroundCommand);
-    xbutton.whileTrue(raisetohighCommand);
+    bbutton.whileTrue(raisetohighCommand);
     // bbutton.whileTrue(fS_2CubeAutoCommand);
     // ybutton.whileTrue();
     // fwdbutton.whileTrue(arm_Maintain_HeightCommand);

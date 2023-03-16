@@ -28,6 +28,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -253,7 +254,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
       new PIDController(DriveConstants.kPDriveVel, 0, 0), this::tankDriveVolts,
       this)
         .andThen(() -> this.tankDriveVolts(0, 0));
-
-   
   }
 }

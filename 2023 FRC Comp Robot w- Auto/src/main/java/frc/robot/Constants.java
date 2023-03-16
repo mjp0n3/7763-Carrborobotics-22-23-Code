@@ -96,14 +96,16 @@ public final class Constants {
     }
     public static final class ArmConstants {
         //arm motor ports (change)
-        public static final int ArmRightID = 0;
+        public static final int ArmRightID = 8;
         // public static final int ArmLeftID = 69;
         public static final int ArmEncoder = (1);
         //need to update
         public static final double kConversionFactor = 100;
         public static final int kCurrentLimit = 1;
-        public static final double ksoftforwardlimit = 100;
-        public static final double ksoftreverselimit = 0;
+        public static final int ksoftforwardlimit = 100;
+        public static final int ksoftreverselimit = 0;
+        public static final boolean enableforwardlimit = false;
+        public static final boolean enabletreverselimit = false;
     }
 
     //autonomous paths 
