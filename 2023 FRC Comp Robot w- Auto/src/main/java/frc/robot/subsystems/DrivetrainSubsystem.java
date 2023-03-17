@@ -101,8 +101,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Configures the encoder to return a distance of 4 for every 256 pulses
     // Also changes the units of getRate
-    rightEncoder.setDistancePerPulse(4.0/256.0);
-    leftEncoder.setDistancePerPulse(4.0/256.0);
+    rightEncoder.setDistancePerPulse(3.78
+    );
+    leftEncoder.setDistancePerPulse(3.78
+    );
 
     // Configures the encoder to consider itself stopped after .1 seconds
     rightEncoder.setMinRate(0.1);
@@ -183,8 +185,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       }
     
       public void tankDriveVolts(double leftVolts, double rightVolts) {
-        leftControllerGroup.setVoltage(leftVolts);
-        rightControllerGroup.setVoltage(-rightVolts);
+        leftControllerGroup.setVoltage(-leftVolts);
+        rightControllerGroup.setVoltage(rightVolts);
         differentialDrive.feed();
       }
     
@@ -238,8 +240,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
   }
 
-  public Command followTrajectoryCommand(String pathName, boolean zeroInitialPose) {
-    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
+  public Command followTrajectoryCommand(String pathName, boolean zeroInitialPose, double maxacc, double maxspeed) {
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, new PathConstraints(maxspeed, maxacc));
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
       this.resetOdometry(trajectoryToFollow.getInitialPose());

@@ -26,33 +26,59 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmSubsystem extends SubsystemBase {
+      //motor controller for arm declared here
+      CANSparkMax ArmRight = new CANSparkMax(Constants.ArmConstants.ArmRightID, MotorType.kBrushed);
+
   private static final double KvFeedForwardValue = 0;
 
   private static final double KsFeedForwardValue = 0;
 
-  private static final double kI = 0;
-
-  private static final double kD = 0;
 
   private final AbsoluteEncoder ArmEncoder;
-    //motor controllers for arm declared here
-    CANSparkMax ArmRight = new CANSparkMax(Constants.ArmConstants.ArmRightID, MotorType.kBrushed);
-    // WPI_TalonSRX ArmLeft = new WPI_TalonSRX(Constants.ArmConstants.ArmLeftID);
 
+  double requestedSpeed = 0;
 
+  private final SparkMaxPIDController arm_PIDController;
 
- 
-  
-    // DutyCycleEncoder ArmEncoder = new DutyCycleEncoder(Constants.ArmConstants.ArmEncoder);
+  public double setpoint;
 
-  MotorControllerGroup armControllerGroup = new MotorControllerGroup(ArmRight); //, armleft
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
 
     ArmEncoder = ArmRight.getAbsoluteEncoder(Type.kDutyCycle);
-    // private final SparkMaxPIDController armPIDcontroller;
-    
+
+    arm_PIDController = ArmRight.getPIDController();
+    arm_PIDController.setFeedbackDevice(ArmEncoder);
+
+    // Probably dont need this
+    arm_PIDController.setPositionPIDWrappingEnabled(false);
+
+    arm_PIDController.setP(ArmConstants.kP);
+    arm_PIDController.setI(ArmConstants.kI);
+    arm_PIDController.setD(ArmConstants.kD);
+    arm_PIDController.setFF(ArmConstants.kFF);
+
+    arm_PIDController.setOutputRange(ArmConstants.kMinOutput, ArmConstants.kMaxOutput);
+    ArmEncoder.setPositionConversionFactor(ArmConstants.kConversionFactor);
+  
+    //enable soft limits
+    ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.kEnableForwardLimit);
+    ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.kEnableReverseLimit);
+    //set soft limits
+    ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, (float)ArmConstants.kForwardLimit);
+    ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, (float)ArmConstants.kReverseLimit);
+
+    ArmRight.setSmartCurrentLimit(ArmConstants.kCurrentLimit);
+
+    ArmRight.setOpenLoopRampRate(ArmConstants.kRampRate);
+
+    ArmRight.setClosedLoopRampRate(ArmConstants.kRampRate);
+
+    ArmRight.setInverted(false);
+  //idk if we need this
+    // ArmRight.burnFlash();
+
     // ArmLeft.configFactoryDefault();
     ArmRight.restoreFactoryDefaults();
     ArmRight.setInverted(false);
@@ -61,16 +87,14 @@ public class ArmSubsystem extends SubsystemBase {
     // ArmEncoder.set(360); 
     ArmRight.setInverted(false);
     // ArmRight.maxOutput(ArmConstants.kCurrentLimit);
-    ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.enabletreverselimit);
-    ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.enableforwardlimit);
+
 
     // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.ksoftforwardlimit);
     // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.ksoftreverselimit);
-    ArmRight.set(pid.calculate(ArmEncoder.getPosition(), 100));
-
+ 
+    
   }
-  double requestedSpeed = 0;
-
+ 
   //get encoder position
   public double getPosition() {
     return ArmEncoder.getPosition();
@@ -93,7 +117,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   
   // Creates a PIDController with gains kP, kI, and kD
-PIDController pid = new PIDController(ArmConstants.kP, kI, kD);
+PIDController pid = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD);
 
 // Calculates the output of the PID algorithm based on the sensor reading
 // and sends it to a motor
@@ -112,7 +136,7 @@ PIDController pid = new PIDController(ArmConstants.kP, kI, kD);
 
   //arm off
   public void setmotorsoff() {
-    armControllerGroup.set(0);
+    ArmRight.set(0);
   }
   //set positions
 

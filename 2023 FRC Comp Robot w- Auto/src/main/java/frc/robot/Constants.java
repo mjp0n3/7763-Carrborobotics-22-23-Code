@@ -49,8 +49,8 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
                 kTrackWidthMeters);
             
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxSpeedMetersPerSecond = 1;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1;
 
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
@@ -97,16 +97,21 @@ public final class Constants {
     public static final class ArmConstants {
         //arm motor ports (change)
         public static final int ArmRightID = 11;
-        // public static final int ArmLeftID = 69;
-        public static final int ArmEncoder = (1);
+        // public static final int ArmEncoder = (1);
         //need to update
         public static final double kConversionFactor = 100;
         public static final int kCurrentLimit = 1;
-        public static final int ksoftforwardlimit = 100;
-        public static final int ksoftreverselimit = 0;
-        public static final boolean enableforwardlimit = false;
-        public static final boolean enabletreverselimit = false;
         public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kFF = 0;
+        public static final double kMinOutput = 0;
+        public static final double kMaxOutput = 0;
+        public static final double kRampRate = 0;      //change to true when add value
+        public static final boolean kEnableForwardLimit = false;
+        public static final boolean kEnableReverseLimit = false;
+        public static final float kForwardLimit = 0;
+        public static final float kReverseLimit = 0;
     }
 
     //autonomous paths 

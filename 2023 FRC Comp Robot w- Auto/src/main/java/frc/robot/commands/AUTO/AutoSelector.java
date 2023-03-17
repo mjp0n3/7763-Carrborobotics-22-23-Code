@@ -45,7 +45,7 @@ public class AutoSelector {
 
     //  2. Drives forwards 
     new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube1", true)
+      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube1",false, 1, 1)
   ).withTimeout(1.68),
 
 
@@ -56,7 +56,7 @@ public class AutoSelector {
 
     //  4. Drives backwards 
     new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube2", false)
+      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube2",false, 1, 1)
   ).withTimeout(2.17),
 
 
@@ -67,19 +67,19 @@ public class AutoSelector {
     
     //  6. Drives to the second cube 
     new ParallelCommandGroup(
-        drivetrainSubsystem.followTrajectoryCommand("FS_2Cube3", false),
+        drivetrainSubsystem.followTrajectoryCommand("FS_2Cube3",false, 1, 1),
       new GrabberGrabCommand(grabberSubsystem)
   ).withTimeout(2.84),
 
   //  7. Drives forward and picks up cube
   new ParallelCommandGroup(
-    drivetrainSubsystem.followTrajectoryCommand("FS_2Cube4", false),
+    drivetrainSubsystem.followTrajectoryCommand("FS_2Cube4",false, 1, 1),
   new GrabberGrabCommand(grabberSubsystem)
 ).withTimeout(1.41),
 
     //  8. Spins around and drives back to community
     new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube5", false)
+      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube5",false, 1, 1)
   ).withTimeout(3.57),
 
 
@@ -90,7 +90,7 @@ public class AutoSelector {
 
     // 10. Drives forward
     new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube6", false)
+      drivetrainSubsystem.followTrajectoryCommand("FS_2Cube6", false, 1, 1)
   ).withTimeout(1.54),
 
     //  12. Scores 2nd cube
@@ -112,23 +112,27 @@ public class AutoSelector {
       
   ));
 
-  autochooser.addOption("Score 1 Cube only", new SequentialCommandGroup(
+  autochooser.setDefaultOption("Score 1 Cube only", new SequentialCommandGroup(
 
   //   //1. raise arm
   //   new InstantCommand(() -> armSubsystem.setArmHighCube()
   // ).withTimeout(0.5),
     new ParallelCommandGroup(
     new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(0.5),
+  ).withTimeout(0.1),
     
     //2. drive forward
     new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("MiddleForward", true)
-  ).withTimeout(1.86),
+      drivetrainSubsystem.followTrajectoryCommand("MiddleForward",true, 0.01, 0.01)
+  ).withTimeout(2),
 
     //3. outake cube
     new InstantCommand(() -> grabberSubsystem.OutakeCube()
-  ).withTimeout(0.5)
+  ).withTimeout(0.5),
+
+   //4. stop outake cube
+   new InstantCommand(() -> grabberSubsystem.Intakeoff()
+   ).withTimeout(0.2)
 
     //end of single score auto
       
@@ -143,7 +147,7 @@ public class AutoSelector {
     
     //2. drive forward
     new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("MiddleForward", false)
+      drivetrainSubsystem.followTrajectoryCommand("MiddleForward",false, 1, 1)
   ).withTimeout(0.5),
 
     //3. outake cube
@@ -159,7 +163,7 @@ public class AutoSelector {
 
 ));
 
-  autochooser.setDefaultOption(" balance", new SequentialCommandGroup(
+  autochooser.addOption(" balance", new SequentialCommandGroup(
     //  . drive forward to charge station
 
     new AutoDriveToPlatformCommand(drivetrainSubsystem, 0.5, 15, 2),
