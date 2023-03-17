@@ -21,11 +21,11 @@ public final class Constants {
 
     public static final class DrivetrainConstants{
         //motor id's
-        public static final int RightFrontID = 2; //motor 3
-        public static final int RightBackID = 6; //motor 4
-        public static final int LeftFrontID = 7; //motor 1
+        public static final int RightFrontID = 4; //motor 3
+        public static final int RightBackID = 3; //motor 4
+        public static final int LeftFrontID = 2; //motor 1
         public static final int LeftBackID = 1;  //motor 2
-        //sensitivity for robot driving with joysticks
+        //sensitivity for robot driving with joysticksp
         public static final double maxdrivespeed = 0.70;
         public static final double maxturnspeed = 0.70;
         // right encoder
@@ -91,12 +91,12 @@ public final class Constants {
         public static final int GrabberDeployedPort = 2;
         public static final int GrabberRetractedPort = 3;
         //intake motors
-        public static final int RightIntakeMotor = 3;
-        public static final int LeftIntakeMotor = 4;
+        public static final int RightIntakeMotor = 8;
+
     }
     public static final class ArmConstants {
         //arm motor ports (change)
-        public static final int ArmRightID = 8;
+        public static final int ArmRightID = 11;
         // public static final int ArmLeftID = 69;
         public static final int ArmEncoder = (1);
         //need to update
@@ -106,14 +106,15 @@ public final class Constants {
         public static final int ksoftreverselimit = 0;
         public static final boolean enableforwardlimit = false;
         public static final boolean enabletreverselimit = false;
+        public static final double kP = 0;
     }
 
     //autonomous paths 
     public static final class PathPlannerConstants  {
 
         //Follow Trajectory Values
-        public static final int autoMaxVelocity = 3;
-        public static final int autoMaxAcceleration = 3;
+        public static final int autoMaxVelocity = 2;
+        public static final int autoMaxAcceleration = 2;
         
         //2cube feeder side no climb auto           
         public static final String fs_2cubepath1 = "FS_2Cube1";
@@ -143,6 +144,8 @@ public final class Constants {
         public static final double balanceSpeed = 0.07;  //might need to ajust
 
         public static final double angleCoefficient = 1.5; //again, might need to ajust
+
+        public static final int polyCoeff = 0;
 
         
     }

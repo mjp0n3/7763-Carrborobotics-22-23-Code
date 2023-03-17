@@ -34,8 +34,8 @@ public class AutoBalanceCommand extends CommandBase{
     @Override
     public void execute(){
         elevationAngle = drivetrainSubsystem.getElevationAngle();
-        output = updateDrive();
-        drivetrainSubsystem.arcadeDrive(output, 0); //assuming tank drive defined as drive(speed, rotation), add extra arguments as necessary
+        output = updateDrive();         //rot   //fwd
+        drivetrainSubsystem.arcadeDrive(0, output); //assuming tank drive defined as drive(speed, rotation), add extra arguments as necessary
     }
 
 

@@ -11,11 +11,15 @@ import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -26,22 +30,35 @@ public class ArmSubsystem extends SubsystemBase {
 
   private static final double KsFeedForwardValue = 0;
 
+  private static final double kI = 0;
+
+  private static final double kD = 0;
+
+  private final AbsoluteEncoder ArmEncoder;
     //motor controllers for arm declared here
     CANSparkMax ArmRight = new CANSparkMax(Constants.ArmConstants.ArmRightID, MotorType.kBrushed);
     // WPI_TalonSRX ArmLeft = new WPI_TalonSRX(Constants.ArmConstants.ArmLeftID);
+
+
+
+ 
   
-    DutyCycleEncoder ArmEncoder = new DutyCycleEncoder(Constants.ArmConstants.ArmEncoder);
+    // DutyCycleEncoder ArmEncoder = new DutyCycleEncoder(Constants.ArmConstants.ArmEncoder);
 
   MotorControllerGroup armControllerGroup = new MotorControllerGroup(ArmRight); //, armleft
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
+
+    ArmEncoder = ArmRight.getAbsoluteEncoder(Type.kDutyCycle);
+    // private final SparkMaxPIDController armPIDcontroller;
+    
     // ArmLeft.configFactoryDefault();
     ArmRight.restoreFactoryDefaults();
     ArmRight.setInverted(false);
 
     //setting some stuff up
-    ArmEncoder.setDistancePerRotation(360); 
+    // ArmEncoder.set(360); 
     ArmRight.setInverted(false);
     // ArmRight.maxOutput(ArmConstants.kCurrentLimit);
     ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.enabletreverselimit);
@@ -49,30 +66,37 @@ public class ArmSubsystem extends SubsystemBase {
 
     // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.ksoftforwardlimit);
     // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.ksoftreverselimit);
+    ArmRight.set(pid.calculate(ArmEncoder.getPosition(), 100));
 
   }
   double requestedSpeed = 0;
 
   //get encoder position
   public double getPosition() {
-    return ArmEncoder.getAbsolutePosition();
+    return ArmEncoder.getPosition();
   }
 
     //reset encoder
     public void resetarm() {
-    ArmEncoder.reset();
+    // ArmEncoder.resetEncoders();
     }
     
   
   //arm up
   public void setArmHigh() {
-    ArmRight.set(.60);
+    ArmRight.set(-.60);
   }
   //arm down
   public void setArmDown() {
-    ArmRight.set(-.60);
+    ArmRight.set(.60);
   }
 
+  
+  // Creates a PIDController with gains kP, kI, and kD
+PIDController pid = new PIDController(ArmConstants.kP, kI, kD);
+
+// Calculates the output of the PID algorithm based on the sensor reading
+// and sends it to a motor
 
 
   //arm break mode
@@ -129,7 +153,7 @@ public class ArmSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Arm encoder value meters", ArmEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm encoder value meters", ArmEncoder.getPosition());
     SmartDashboard.putNumber("Applied Speed", ArmRight.getAppliedOutput());
     // SmartDashboard.putNumber("SparkMaxState", ArmRight.getIdleMode());
     SmartDashboard.putNumber("Desired Speeed", requestedSpeed);

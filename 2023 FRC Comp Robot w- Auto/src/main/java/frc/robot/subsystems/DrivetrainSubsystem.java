@@ -114,7 +114,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Reverses the direction of the encoder
     rightEncoder.setReverseDirection(false);
-    leftEncoder.setReverseDirection(false);
+    leftEncoder.setReverseDirection(true);
 
     // Configures an encoder to average its period measurement over 5 samples
     // Can be between 1 and 127 samples
@@ -184,7 +184,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
       public void tankDriveVolts(double leftVolts, double rightVolts) {
         leftControllerGroup.setVoltage(leftVolts);
-        rightControllerGroup.setVoltage(rightVolts);
+        rightControllerGroup.setVoltage(-rightVolts);
         differentialDrive.feed();
       }
     
@@ -234,6 +234,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Left encoder value meters", getLeftEncoderPosition());
     SmartDashboard.putNumber("RIGHT encoder value meters", getRightEncoderPosition());
     SmartDashboard.putNumber("Gyro heading", getHeading());
+    SmartDashboard.putNumber("Gyro angle", getElevationAngle());
     
   }
 

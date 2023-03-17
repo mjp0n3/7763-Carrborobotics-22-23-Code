@@ -28,7 +28,7 @@ public class AutoDriveToPlatformCommand extends CommandBase{
     public AutoDriveToPlatformCommand(DrivetrainSubsystem drivetrainSubsystem, double speed , double angleThreshold , double checkDuration) {
         this.drivetrainSubsystem = drivetrainSubsystem;
         this.angleThreshold = angleThreshold;
-        this.speed = speed;
+        this.speed = -speed;
         this.duration = checkDuration;
         this.time = 0;
         this.check = false;
@@ -44,7 +44,7 @@ public class AutoDriveToPlatformCommand extends CommandBase{
 
     @Override
     public void execute(){
-        drivetrainSubsystem.arcadeDrive(speed, 0); //same as the previous comment^^
+        drivetrainSubsystem.arcadeDrive(0, speed); //same as the previous comment^^
         elevationAngle = drivetrainSubsystem.getElevationAngle();
         if(Math.abs(elevationAngle) > angleThreshold){
             if(!check){
