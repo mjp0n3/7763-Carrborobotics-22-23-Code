@@ -29,7 +29,8 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser"
+      "/Shuffleboard/Autonomous/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/Auto Selector": "String Chooser"
     },
     "windows": {
       "/FMSInfo": {
@@ -47,6 +48,11 @@
   "NetworkTables": {
     "Retained Values": {
       "open": false
+    },
+    "transitory": {
+      "SmartDashboard": {
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {

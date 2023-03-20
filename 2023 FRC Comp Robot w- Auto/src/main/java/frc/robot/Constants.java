@@ -40,10 +40,10 @@ public final class Constants {
 
     public static final class DriveConstants{
         //CisID constant
-        public static final double ksVolts = 0.99606;
-        public static final double kvVoltSecondsPerMeter = 366.2;
-        public static final double kaVoltSecondsSquaredPerMeter = 132.93;
-        public static final double kPDriveVel = 25.418;
+        public static final double ksVolts = 0.99606; //0.99606 old
+        public static final double kvVoltSecondsPerMeter = 1.282; //366.2 old
+        public static final double kaVoltSecondsSquaredPerMeter = 0.237; //132.93 old
+        public static final double kPDriveVel = 1.572; //25.418 old
         
         public static final double kTrackWidthMeters = Units.inchesToMeters(21.25);
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
@@ -99,19 +99,28 @@ public final class Constants {
         public static final int ArmRightID = 11;
         // public static final int ArmEncoder = (1);
         //need to update
-        public static final double kConversionFactor = 100;
+        public static final double kConversionFactor = 1;
         public static final int kCurrentLimit = 1;
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kP = 0.1;
+        public static final double kI = 0.1;
+        public static final double kD = 0.1;
         public static final double kFF = 0;
-        public static final double kMinOutput = 0;
-        public static final double kMaxOutput = 0;
+        public static final double kMinOutput = -0.5;
+        public static final double kMaxOutput = 0.5;
         public static final double kRampRate = 0;      //change to true when add value
         public static final boolean kEnableForwardLimit = false;
         public static final boolean kEnableReverseLimit = false;
         public static final float kForwardLimit = 0;
         public static final float kReverseLimit = 0;
+        public static final double khighcubepos = 0.01075;
+        public static final double kmediumcubepos = 0.07117;
+        public static final double kgroundpos = 0.273;
+     
+
+
+        //mid level = 0.07117
+        //high level = 0.01075
+        //store and intake and low is 0.273 (pos i think? idk, double check later)
     }
 
     //autonomous paths 
@@ -146,7 +155,7 @@ public final class Constants {
 
         public static final double platformMaxAngle = 15;  //or maybe its 11.5? or maybe something else entirely lol
 
-        public static final double balanceSpeed = 0.07;  //might need to ajust
+        public static final double balanceSpeed = 0.05;  //might need to ajust
 
         public static final double angleCoefficient = 1.5; //again, might need to ajust
 

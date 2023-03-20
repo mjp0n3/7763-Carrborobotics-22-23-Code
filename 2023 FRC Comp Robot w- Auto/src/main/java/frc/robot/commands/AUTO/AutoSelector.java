@@ -4,8 +4,11 @@
 
 package frc.robot.commands.AUTO;
 
+import javax.management.InstanceAlreadyExistsException;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -15,6 +18,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;
 import frc.robot.commands.LowerToGroundCommand;
@@ -23,20 +27,130 @@ public class AutoSelector {
   /** Creates a new AutoSelector. */
   private final SendableChooser<Command> autochooser = new SendableChooser<>();
 
+
   private final Timer timer = new Timer();
   
   public AutoSelector(DrivetrainSubsystem drivetrainSubsystem, ArmSubsystem armSubsystem, GrabberSubsystem grabberSubsystem) {
-    //currently we have a 
-    //-2 cube auto (left/feeder side)
-    //-score one then balance (center)
-    //-score only (any side )
-    //later add the other side one for a 2 cube there
-    //a testing one that just prints that it ran
 
-    autochooser.addOption("FS_2CubeAUTOCOMMAND", new SequentialCommandGroup(
+  //autos:
+  // 1. score 1 cube high only (anywhere) (DONE 'n TESTED)
+  
+  // 2. score 1 cube and mobility (sides) (Mobility is iffy)
+  
+  // 3. score 1 cube and balance (middle) (!Not tested!, tune the 360 turn )
 
-   
+  // 4. balance only (middle) (should be good?)
 
+
+autochooser.addOption("score and balance (360 timed)", new SequentialCommandGroup(
+
+   //1. arm up
+   new ParallelCommandGroup(
+    new RaiseToHighCommand(armSubsystem)
+  ).withTimeout(2.0),
+
+
+    //2. outake
+    new ParallelCommandGroup(
+      new GrabberReleaseCommand(grabberSubsystem)
+  ).withTimeout(1),
+
+    //2. 360+arm down
+    new ParallelCommandGroup(
+      new InstantCommand( ()->drivetrainSubsystem.arcadeDrive(0.35, 0)),
+      new LowerToGroundCommand(armSubsystem)
+  ).withTimeout(2),
+
+    
+    // 3. drive to balance
+      new AutoDriveToPlatformCommand(drivetrainSubsystem,  0.7, 8, 0.3), //ajust these maybe? idk
+
+    //4. balance
+      new AutoBalanceCommand(drivetrainSubsystem)
+    //end of score and balance
+    ));
+
+
+autochooser.addOption("balance only", new SequentialCommandGroup(
+  //  . drive forward to charge station
+
+  new AutoDriveToPlatformCommand(drivetrainSubsystem, 0.7, 8, 0.3), //ajust these maybe? idk
+
+  
+  //2. balance!
+
+  new AutoBalanceCommand(drivetrainSubsystem)
+
+));
+
+autochooser.addOption("drive only", 
+  //  . drive forward to charge station
+
+  new RunCommand( ()->drivetrainSubsystem.tankDriveVolts(6, 6), drivetrainSubsystem)
+
+);
+
+autochooser.setDefaultOption("score and dip", new SequentialCommandGroup(
+    //arm up
+    new ParallelCommandGroup(
+    new RaiseToHighCommand(armSubsystem)
+  ).withTimeout(2.0),
+
+
+    //2. outake
+    new ParallelCommandGroup(
+      new GrabberReleaseCommand(grabberSubsystem)
+  ).withTimeout(1),
+
+
+    new ParallelCommandGroup(
+      new RunCommand( ()->drivetrainSubsystem.arcadeDrive(0,0.7), drivetrainSubsystem),
+      new LowerToGroundCommand(armSubsystem)
+  ).withTimeout(3)
+    //end of score and dip new
+));
+
+autochooser.addOption("score ONLY", new SequentialCommandGroup(
+    //arm up
+    new ParallelCommandGroup(
+      new RaiseToHighCommand(armSubsystem)
+  ).withTimeout(2.0),
+
+
+    //2. outake
+    new ParallelCommandGroup(
+      new GrabberReleaseCommand(grabberSubsystem)
+  ).withTimeout(1),
+
+// autochooser.addOption("old score and balance", new SequentialCommandGroup(
+
+// //1. raise arm
+// new InstantCommand(() -> armSubsystem.setArmHighCube()
+// ).withTimeout(1.5),
+
+
+// //2. drive forward
+// new InstantCommand(() -> drivetrainSubsystem.arcadeDrive(0, 0.3)  //might need to ajust the going forward bit idk, possibly reverse it? idk
+// ).withTimeout(0.5),
+
+// //3. outake cube
+// new InstantCommand(() -> grabberSubsystem.OutakeCube()
+// ).withTimeout(0.5),
+
+// //4. stop outake cube
+// new InstantCommand(() -> grabberSubsystem.Intakeoff()
+// ).withTimeout(0.2)
+
+// ));
+
+// 5. drive to balance
+new AutoDriveToPlatformCommand(drivetrainSubsystem, 0.7, 8, 0.075), //ajust these maybe? idk
+
+//6. balance
+new AutoBalanceCommand(drivetrainSubsystem)
+));
+
+autochooser.addOption("old FS_2CubeAUTOCOMMAND", new SequentialCommandGroup(
 
     //  1. Raises arm
     new ParallelCommandGroup(
@@ -97,84 +211,10 @@ public class AutoSelector {
     new ParallelCommandGroup(
       new GrabberReleaseCommand(grabberSubsystem)
  ).withTimeout(0.5)
-
   //end of FS2CubeAutoCommand
-    
   ));
 
-
-    
-  autochooser.addOption("option2", new SequentialCommandGroup(
-   
-      new PrintCommand("option 2 ran")
-
-    //end of option 2 auto
-      
-  ));
-
-  autochooser.setDefaultOption("Score 1 Cube only", new SequentialCommandGroup(
-
-  //   //1. raise arm
-  //   new InstantCommand(() -> armSubsystem.setArmHighCube()
-  // ).withTimeout(0.5),
-    new ParallelCommandGroup(
-    new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(0.1),
-    
-    //2. drive forward
-    new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("MiddleForward",true, 0.01, 0.01)
-  ).withTimeout(2),
-
-    //3. outake cube
-    new InstantCommand(() -> grabberSubsystem.OutakeCube()
-  ).withTimeout(0.5),
-
-   //4. stop outake cube
-   new InstantCommand(() -> grabberSubsystem.Intakeoff()
-   ).withTimeout(0.2)
-
-    //end of single score auto
-      
-));
-
-  autochooser.addOption("score and balance", new SequentialCommandGroup(
-
-    //1. raise arm
-    new InstantCommand(() -> armSubsystem.setArmHighCube()
-  ).withTimeout(0.5),
-
-    
-    //2. drive forward
-    new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("MiddleForward",false, 1, 1)
-  ).withTimeout(0.5),
-
-    //3. outake cube
-    new InstantCommand(() -> grabberSubsystem.OutakeCube()
-  ).withTimeout(0.5),
-  //end of score and balance auto
-
-  //4. drive to balance
-    new AutoDriveToPlatformCommand(drivetrainSubsystem, 0.5, 15, 2),
-
-  //5. balance
-    new AutoBalanceCommand(drivetrainSubsystem)
-
-));
-
-  autochooser.addOption(" balance", new SequentialCommandGroup(
-    //  . drive forward to charge station
-
-    new AutoDriveToPlatformCommand(drivetrainSubsystem, 0.5, 15, 2),
-
-    
-    //2. balance!
-
-    new AutoBalanceCommand(drivetrainSubsystem)
-
-));
-
+SmartDashboard.putData("Auto Selector", autochooser);
   }
   public Command getSelected() {
     return autochooser.getSelected();

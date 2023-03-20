@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+// aopyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -72,7 +72,7 @@ public class RobotContainer {
   //os 1 cube climb auto command
   private final OS_CClimbAutoCommand  oS_CClimbAutoCommand = new OS_CClimbAutoCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   //auto selector command command
-  private final frc.robot.commands.AUTO.AutoSelector  AutoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
+  // private final frc.robot.commands.AUTO.AutoSelector  AutoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
 
   // final Command oS_CClimbAutoCommand = new instantCommand(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   // private final DriveCommand driveCommand = new DriveCommand(drivetrainsubsystem);
@@ -98,7 +98,6 @@ public class RobotContainer {
   AutoSelector autoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
 
   public RobotContainer() { 
-    autoSelector = new AutoSelector(drivetrainsubsystem, armsubsystem, grabbersubsystem);
   
     // Configure the button bindings
     configureButtonBindings();
@@ -108,13 +107,11 @@ public class RobotContainer {
       , drivetrainsubsystem
     ));
     //buttons
+    // abutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmHighCube()));
+    // bbutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmMidCube()));
+    // xbutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmGround()));
     abutton.whileTrue(lowertogroundCommand);
     bbutton.whileTrue(raisetohighCommand);
-    // bbutton.whileTrue(fS_2CubeAutoCommand);
-    // ybutton.whileTrue();
-    // fwdbutton.whileTrue(arm_Maintain_HeightCommand);
-    // backbutton.whileTrue();
-    //
     //intake / outake cube/cone with RB and LB
     lbbutton.whileTrue(new InstantCommand(() -> grabbersubsystem.IntakeCube()));
     lbbutton.whileFalse(new InstantCommand(() -> grabbersubsystem.Intakeoff()));
@@ -122,16 +119,6 @@ public class RobotContainer {
     rbbutton.whileFalse(new InstantCommand(() -> grabbersubsystem.Intakeoff()));
     // smtnbutton.onTrue(new InstantCommand(() -> grabbersubsystem.IntakeCone()));
     // smtnbutton.onTrue(new InstantCommand(() -> grabbersubsystem.OutakeCone()));
-
-
-
-
-
-
-
-
-
-
 
   }
 

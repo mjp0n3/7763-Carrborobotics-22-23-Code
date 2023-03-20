@@ -41,14 +41,15 @@ public class AutoBalanceCommand extends CommandBase{
 
     private double updateDrive() {
         return -signOf(elevationAngle)*(Math.pow(Balanceconstants.angleCoefficient  * (Math.abs(elevationAngle) / Balanceconstants.platformMaxAngle), 2)) * Balanceconstants.balanceSpeed;
+
     }
 
 
-    private int signOf(double num){
+    private double signOf(double num){
         if(num < 0){
-            return -1;
+            return -.5;
         } else if (num > 0){
-            return 1;
+            return .5;
         } else {
             return 0;
         }

@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -20,6 +22,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -49,6 +52,7 @@ public class ArmSubsystem extends SubsystemBase {
     ArmEncoder = ArmRight.getAbsoluteEncoder(Type.kDutyCycle);
 
     arm_PIDController = ArmRight.getPIDController();
+
     arm_PIDController.setFeedbackDevice(ArmEncoder);
 
     // Probably dont need this
@@ -57,11 +61,13 @@ public class ArmSubsystem extends SubsystemBase {
     arm_PIDController.setP(ArmConstants.kP);
     arm_PIDController.setI(ArmConstants.kI);
     arm_PIDController.setD(ArmConstants.kD);
+    
+    // arm_PIDController.setkIz(0)
     arm_PIDController.setFF(ArmConstants.kFF);
 
     arm_PIDController.setOutputRange(ArmConstants.kMinOutput, ArmConstants.kMaxOutput);
     ArmEncoder.setPositionConversionFactor(ArmConstants.kConversionFactor);
-  
+    ArmEncoder.setInverted(true);
     //enable soft limits
     ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.kEnableForwardLimit);
     ArmRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, ArmConstants.kEnableReverseLimit);
@@ -75,13 +81,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     ArmRight.setClosedLoopRampRate(ArmConstants.kRampRate);
 
-    ArmRight.setInverted(false);
+    ArmEncoder.setInverted(true);
   //idk if we need this
     // ArmRight.burnFlash();
 
     // ArmLeft.configFactoryDefault();
     ArmRight.restoreFactoryDefaults();
     ArmRight.setInverted(false);
+    // setAngleSetpointRadians(getArmEncoderRadians());
 
     //setting some stuff up
     // ArmEncoder.set(360); 
@@ -93,6 +100,7 @@ public class ArmSubsystem extends SubsystemBase {
     // ArmRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, ArmConstants.ksoftreverselimit);
  
     
+
   }
  
   //get encoder position
@@ -106,6 +114,24 @@ public class ArmSubsystem extends SubsystemBase {
     }
     
   
+
+//   public Command rotateToCommand(Rotation2d angle) {
+//     return runOnce(() -> setAngleSetpointRadians(angle.getRadians()));
+// }
+
+// public void rotate(double percent) {
+//   SmartDashboard.putNumber("RotateRotercent", percent);
+//   if (percent == 0.0){
+//       if (isOpenLoopRotation){
+//           hold();
+//       }
+//   } else {
+//       isOpenLoopRotation = true;
+//       ArmRight.set(percent);
+//   }
+// }
+
+
   //arm up
   public void setArmHigh() {
     ArmRight.set(-.60);
@@ -118,6 +144,8 @@ public class ArmSubsystem extends SubsystemBase {
   
   // Creates a PIDController with gains kP, kI, and kD
 PIDController pid = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD);
+
+// arm_PIDController.setreferance(setpoint, cansparkmax.controltype.kposition)
 
 // Calculates the output of the PID algorithm based on the sensor reading
 // and sends it to a motor
@@ -141,25 +169,31 @@ PIDController pid = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConst
   //set positions
 
   //arm high cone command
-  public void setArmHighCone() {}
+  // public void setArmHighCone() {}
   
-  //arm mid cone command
-  public void setMidHighCone() {}
+  // //arm mid cone command
+  // public void setMidHighCone() {}
 
   //arm high cube command
-  public void setArmHighCube() {}
+  public void setArmHighCube() {
+    arm_PIDController.setReference(ArmConstants.khighcubepos, CANSparkMax.ControlType.kPosition);
+  }
 
   //arm mid cube command
-  public void setArmMidCube() {}
+  public void setArmMidCube() {
+    arm_PIDController.setReference(ArmConstants.kmediumcubepos, CANSparkMax.ControlType.kPosition);
+  }
 
   //arm ground intake command
-  public void setArmGround() {}
+  public void setArmGround() {
+    arm_PIDController.setReference(ArmConstants.kgroundpos, CANSparkMax.ControlType.kPosition);
+  }
 
   //arm double feeder command
-  public void setArmFeeder() {}
+  // public void setArmFeeder() {}
 
-  ///arm store command
-  public void setArmStore() {}
+  // ///arm store command
+  // public void setArmStore() {}
 
   //arm single feeder command 
   //nothing since we dont do single feeder L
@@ -177,7 +211,7 @@ PIDController pid = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConst
   
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Arm encoder value meters", ArmEncoder.getPosition());
+    SmartDashboard.putNumber("Arm encoder value", ArmEncoder.getPosition());
     SmartDashboard.putNumber("Applied Speed", ArmRight.getAppliedOutput());
     // SmartDashboard.putNumber("SparkMaxState", ArmRight.getIdleMode());
     SmartDashboard.putNumber("Desired Speeed", requestedSpeed);
