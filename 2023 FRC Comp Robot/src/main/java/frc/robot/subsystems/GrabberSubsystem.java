@@ -6,10 +6,9 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.robot.Constants.ElectronicsConstants;
-import frc.robot.Constants.GrabberConstants;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import frc.robot.Constants;
+
 //unused imports hashed out
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.StatusFrame;
@@ -18,25 +17,46 @@ import frc.robot.Constants.GrabberConstants;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class GrabberSubsystem extends SubsystemBase {
   /** Creates a new GrabberSubsystem. */
-  private final DoubleSolenoid GrabberSolenoid;
+  // private final DoubleSolenoid GrabberSolenoid;
+
+  //intake motors
+  WPI_TalonSRX IntakeMotor = new WPI_TalonSRX(Constants.GrabberConstants.RightIntakeMotor);
+  
+  
   
   public GrabberSubsystem() {
-     GrabberSolenoid = new DoubleSolenoid(ElectronicsConstants.kPneumaticsModuleType,
-    GrabberConstants.GrabberDeployedPort, GrabberConstants.GrabberRetractedPort);
-
- 
+    //grabber solenoids
+    //  GrabberSolenoid = new DoubleSolenoid(ElectronicsConstants.kPneumaticsModuleType,
+    // GrabberConstants.GrabberDeployedPort, GrabberConstants.GrabberRetractedPort);
+  
     }
   
-  //solenoid retract
-  public void setGrabberRetracted() {
-    GrabberSolenoid.set(Value.kReverse);
-  }
-  //solenoid deploy
-  public void setGrabberDeployed() {
-    GrabberSolenoid.set(Value.kForward);
-  }
+  //solenoid retract intake cone
+  // public void IntakeCone() {
+  //   GrabberSolenoid.set(Value.kReverse);
+  // }
+  // //might need to reverse these
+  // //solenoid deploy outake cone 
+  // public void OutakeCone() {
+  //   GrabberSolenoid.set(Value.kForward);
+  // }
 
+  //intake cube
+  public void IntakeCube() {
+    IntakeMotor.set(.6);
+  }
   
+  //outake cube
+  public void OutakeCube() {
+    IntakeMotor.set(-1);
+   
+  }
+   //intake stop 
+   public void Intakeoff() {
+    IntakeMotor.set(0);
+  }
+  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
