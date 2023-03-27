@@ -155,7 +155,7 @@ public final class Constants {
 
         public static final double platformMaxAngle = 11.5;  //or maybe its 11.5? or maybe something else entirely lol
 
-        public static final double balanceSpeed = 0.5;  //might need to ajust
+        public static final double balanceSpeed = 0.15;  //might need to ajust
 
         public static final double angleCoefficient = 1.5; //again, might need to ajust
 

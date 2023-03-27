@@ -57,11 +57,20 @@ autochooser.addOption("score and balance (backwards climb)", new SequentialComma
       new GrabberReleaseCommand(grabberSubsystem)
   ).withTimeout(1),
     
-    // 3. drive to balance
-      new AutoDriveToPlatformCommand(drivetrainSubsystem,  -0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
+    //3. intake stop
+    new RunCommand( ()->grabberSubsystem.Intakeoff(), grabberSubsystem).withTimeout(0.1),
 
-    //4. balance
-      new AutoBalanceCommand(drivetrainSubsystem)
+    //4. lower arm
+    new LowerToGroundCommand(armSubsystem).withTimeout(1.65),
+
+    //5. drive back
+    new RunCommand( ()->drivetrainSubsystem.arcadeDrive(0,-0.5), drivetrainSubsystem).withTimeout(1.5),
+
+    //6. drive to balance
+    new AutoDriveToPlatformCommand(drivetrainSubsystem,  -0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
+
+    //7. balance
+    new AutoBalanceCommand(drivetrainSubsystem)
     //end of score and balance
     ));
 
@@ -69,7 +78,7 @@ autochooser.addOption("score and balance (backwards climb)", new SequentialComma
 autochooser.addOption("balance only", new SequentialCommandGroup(
   //  . drive forward to charge station
 
-  new AutoDriveToPlatformCommand(drivetrainSubsystem, 0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
+  new AutoDriveToPlatformCommand(drivetrainSubsystem, -0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
 
   //2. balance!
 
@@ -88,7 +97,7 @@ autochooser.setDefaultOption("score and dip", new SequentialCommandGroup(
     //arm up
     new ParallelCommandGroup(
     new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(2.0),
+  ).withTimeout(1.65),
 
 
     //2. outake
@@ -100,7 +109,7 @@ autochooser.setDefaultOption("score and dip", new SequentialCommandGroup(
     new ParallelCommandGroup(
       new RunCommand( ()->drivetrainSubsystem.arcadeDrive(0,0.7), drivetrainSubsystem),
       new LowerToGroundCommand(armSubsystem)
-  ).withTimeout(2)
+  ).withTimeout(1.5)
     //end of score and dip new
 ));
 
