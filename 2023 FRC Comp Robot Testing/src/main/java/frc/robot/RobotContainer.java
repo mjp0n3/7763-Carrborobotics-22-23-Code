@@ -97,7 +97,7 @@ public class RobotContainer {
   
     // Configure the button bindings
     configureButtonBindings();
-    drivetrainsubsystem.setDefaultCommand(new RunCommand(() -> drivetrainsubsystem.arcadeDrive(
+    drivetrainsubsystem.setDefaultCommand(new RunCommand(() -> drivetrainsubsystem.curvatureDrive(
       RobotContainer.joystick.getX() * joystick.getX() * joystick.getX() *.75,
       RobotContainer.joystick.getY() * joystick.getY() * joystick.getY()),
       drivetrainsubsystem

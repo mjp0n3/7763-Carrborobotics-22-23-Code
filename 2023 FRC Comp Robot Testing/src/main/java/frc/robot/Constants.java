@@ -22,9 +22,9 @@ public final class Constants {
     public static final class DrivetrainConstants{
         //motor id's
         public static final int RightFrontID = 4; //motor 3
-        public static final int RightBackID = 3; //motor 4
         public static final int LeftFrontID = 2; //motor 1
         public static final int LeftBackID = 1;  //motor 2
+        public static final int RightBackID = 3; //motor 4
         //sensitivity for robot driving with joysticksp
         public static final double maxdrivespeed = 1;   //was .7
         public static final double maxturnspeed = 1; //was .7
@@ -40,10 +40,10 @@ public final class Constants {
 
     public static final class DriveConstants{
         //CisID constant
-        public static final double ksVolts = 0.206; //0.99606 old
-        public static final double kvVoltSecondsPerMeter = 1.282; //366.2 old
-        public static final double kaVoltSecondsSquaredPerMeter = 0.237; //132.93 old
-        public static final double kPDriveVel = 1.572; //25.418 old
+        public static final double ksVolts = -11.934; //0.99606 old
+        public static final double kvVoltSecondsPerMeter = 1.7927; //366.2 old
+        public static final double kaVoltSecondsSquaredPerMeter = 23.389; //132.93 old
+        public static final double kPDriveVel = 0.27225; //25.418 old
         
         public static final double kTrackWidthMeters = Units.inchesToMeters(21.25);
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
@@ -157,7 +157,7 @@ public final class Constants {
 
         public static final double balanceSpeed = 0.15;  //might need to ajust
 
-        public static final double angleCoefficient = 1.5; //again, might need to ajust
+        public static final double angleCoefficient = 0.5; //again, might need to ajust
 
         public static final int polyCoeff = 0;
 

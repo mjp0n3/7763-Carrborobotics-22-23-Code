@@ -4,22 +4,15 @@
 
 package frc.robot.commands.AUTO;
 
-import javax.management.InstanceAlreadyExistsException;
-
-import com.pathplanner.lib.PathConstraints;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.GrabberGrabCommand;
 import frc.robot.commands.GrabberReleaseCommand;
@@ -63,11 +56,11 @@ autochooser.addOption("score and balance (backwards climb)", new SequentialComma
     //4. lower arm
     new LowerToGroundCommand(armSubsystem).withTimeout(1.65),
 
-    //5. drive back
-    new RunCommand( ()->drivetrainSubsystem.arcadeDrive(0,-0.5), drivetrainSubsystem).withTimeout(1.5),
+    //5. drive over charge station for mobility points
+    new RunCommand( ()->drivetrainSubsystem.curvatureDrive(0,0.75), drivetrainSubsystem).withTimeout(2),
 
     //6. drive to balance
-    new AutoDriveToPlatformCommand(drivetrainSubsystem,  -0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
+    new AutoDriveToPlatformCommand(drivetrainSubsystem,  0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
 
     //7. balance
     new AutoBalanceCommand(drivetrainSubsystem)
@@ -75,6 +68,8 @@ autochooser.addOption("score and balance (backwards climb)", new SequentialComma
     ));
 
 
+
+    
 autochooser.addOption("balance only", new SequentialCommandGroup(
   //  . drive forward to charge station
 
@@ -93,7 +88,7 @@ autochooser.addOption("drive only",
 
 );
 
-autochooser.setDefaultOption("score and dip", new SequentialCommandGroup(
+autochooser.addOption("score and dip", new SequentialCommandGroup(
     //arm up
     new ParallelCommandGroup(
     new RaiseToHighCommand(armSubsystem)
@@ -107,7 +102,7 @@ autochooser.setDefaultOption("score and dip", new SequentialCommandGroup(
 
 
     new ParallelCommandGroup(
-      new RunCommand( ()->drivetrainSubsystem.arcadeDrive(0,0.7), drivetrainSubsystem),
+      new RunCommand( ()->drivetrainSubsystem.curvatureDrive(0,0.7), drivetrainSubsystem),
       new LowerToGroundCommand(armSubsystem)
   ).withTimeout(1.5)
     //end of score and dip new
@@ -117,7 +112,7 @@ autochooser.addOption("score ONLY", new SequentialCommandGroup(
     //arm up
     new ParallelCommandGroup(
       new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(2.0),
+  ).withTimeout(1.65),
 
 
     //2. outake
@@ -126,16 +121,81 @@ autochooser.addOption("score ONLY", new SequentialCommandGroup(
   ).withTimeout(1)
 
 ));
-autochooser.addOption("pathplanner test", new SequentialCommandGroup(
+autochooser.setDefaultOption("pathplanner test", new SequentialCommandGroup(
 
 
-    //  2. Drives forwards 
-    new ParallelCommandGroup(
-      drivetrainSubsystem.followTrajectoryCommand("New Test",true, 1, 1)
-
-      ).withTimeout(2.67)
+    //  1. Drives forwards 
+    
+      drivetrainSubsystem.followTrajectoryCommand("TestPath",true, 1, 1)
+  
 
   ));
+  //Feeder Side 2 Cube Auto
+  autochooser.addOption("Feeder Side 2 Cube Auto ", new SequentialCommandGroup(
+
+    //score one
+
+    //  1. arm up
+   new ParallelCommandGroup(
+    new RaiseToHighCommand(armSubsystem)
+  ).withTimeout(2.0),
+
+
+    //  2. outake
+    new ParallelCommandGroup(
+      new GrabberReleaseCommand(grabberSubsystem)
+  ).withTimeout(1),
+    
+    //  3. intake stop
+    new RunCommand( ()->grabberSubsystem.Intakeoff(), grabberSubsystem).withTimeout(0.1),
+
+    //  4. lower arm
+    new LowerToGroundCommand(armSubsystem).withTimeout(1.65),
+
+    //  5. Drive to 2nd cube
+      new RunCommand( ()->
+        drivetrainSubsystem.followTrajectoryCommand("FS2_Path1",true, 2, 3)
+      ).withTimeout(1),
+    
+    //  6.Intake and Drive 
+    new ParallelCommandGroup(
+      new GrabberGrabCommand(grabberSubsystem),
+      drivetrainSubsystem.followTrajectoryCommand("FS2_Path2",false, 2, 3)
+    ).withTimeout(1),
+
+    //  7. Drive back 
+    new RunCommand( ()->
+      drivetrainSubsystem.followTrajectoryCommand("FS2_Path3",false, 2, 3)
+    ).withTimeout(1),
+
+    //  8. arm up
+   new ParallelCommandGroup(
+    new RaiseToHighCommand(armSubsystem)
+  ).withTimeout(2.0),
+
+
+    //  9. outake
+    new ParallelCommandGroup(
+      new GrabberReleaseCommand(grabberSubsystem)
+  ).withTimeout(1),
+    
+    //  10. intake stop
+    new RunCommand( ()->grabberSubsystem.Intakeoff(), grabberSubsystem)
+    .withTimeout(0.1),
+
+    //  11. lower arm
+    new LowerToGroundCommand(armSubsystem)
+    .withTimeout(1.65),
+
+    //  12. Drive to 3rd cube
+    new RunCommand( ()->
+      drivetrainSubsystem.followTrajectoryCommand("FS2_Path4",false, 2, 3)
+    ).withTimeout(1)
+
+    //  end of 2 cube auto
+  ));
+
+
 
 SmartDashboard.putData("Auto Selector", autochooser);
   }

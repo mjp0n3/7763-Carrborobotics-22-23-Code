@@ -8,11 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.PathPlannerConstants;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -26,9 +23,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -92,7 +87,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_gyro.calibrate();
     resetEncoders();
 
-    m_odometry = new DifferentialDriveOdometry(navX.getRotation2d(), gyroOffset, gyroOffset);
+    // m_odometry = new DifferentialDriveOdometry(navX.getRotation2d(), gyroOffset, gyroOffset); old 
+    m_odometry = new DifferentialDriveOdometry(navX.getRotation2d(), getLeftEncoderPosition(), getRightEncoderPosition());
     // m_odometry.resetPosition(new Pose2d(), navX.getRotation2d());
     setBreakMode();
 
@@ -149,8 +145,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   leftEncoder.reset();
   rightEncoder.reset();
     }
-  public void arcadeDrive(double fwd, double rot) {
-      differentialDrive.arcadeDrive(fwd, rot);
+  public void curvatureDrive(double fwd, double rot) {
+      differentialDrive.curvatureDrive(fwd, rot, true);
     }
   public Pose2d getPose() {
         return m_odometry.getPoseMeters();
@@ -230,8 +226,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
 
     // This method will be called once per scheduler run
-      m_odometry.update(m_gyro.getRotation2d(), leftEncoder.getDistance(),
-      rightEncoder.getDistance());
+      m_odometry.update(m_gyro.getRotation2d(), leftEncoder.getDistance(),  rightEncoder.getDistance());
     
     SmartDashboard.putNumber("Left encoder value meters", getLeftEncoderPosition());
     SmartDashboard.putNumber("RIGHT encoder value meters", getRightEncoderPosition());
@@ -247,7 +242,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       this.resetOdometry(trajectoryToFollow.getInitialPose());
     }
 
-    // uncomment for errors abt ramsete lol
+
     return new RamseteCommand(trajectoryToFollow, this::getPose,
       new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
       new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,

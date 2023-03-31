@@ -44,7 +44,7 @@ public class AutoDriveToPlatformCommand extends CommandBase{
 
     @Override
     public void execute(){
-        drivetrainSubsystem.arcadeDrive(0, speed); //same as the previous comment^^
+        drivetrainSubsystem.curvatureDrive(0, speed); //same as the previous comment^^
         elevationAngle = drivetrainSubsystem.getElevationAngle();
         if(Math.abs(elevationAngle) > angleThreshold){
             if(!check){

@@ -35,7 +35,7 @@ public class AutoBalanceCommand extends CommandBase{
     public void execute(){
         elevationAngle = drivetrainSubsystem.getElevationAngle();
         output = updateDrive();         //rot   //fwd
-        drivetrainSubsystem.arcadeDrive(0, output); //assuming tank drive defined as drive(speed, rotation), add extra arguments as necessary
+        drivetrainSubsystem.curvatureDrive(0, output); //assuming tank drive defined as drive(speed, rotation), add extra arguments as necessary
     }
 
 
@@ -47,9 +47,9 @@ public class AutoBalanceCommand extends CommandBase{
 
     private double signOf(double num){
         if(num < 0){
-            return -.45;
+            return -1; //was -.45
         } else if (num > 0){
-            return .45;
+            return 1; //was .45
         } else {
             return 0;
         }
