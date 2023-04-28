@@ -42,7 +42,7 @@ autochooser.addOption("score and balance (backwards climb)", new SequentialComma
    //1. arm up
    new ParallelCommandGroup(
     new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(2.0),
+  ).withTimeout(1),
 
 
     //2. outake
@@ -57,10 +57,10 @@ autochooser.addOption("score and balance (backwards climb)", new SequentialComma
     new LowerToGroundCommand(armSubsystem).withTimeout(1.65),
 
     //5. drive over charge station for mobility points
-    new RunCommand( ()->drivetrainSubsystem.curvatureDrive(0,0.75), drivetrainSubsystem).withTimeout(2),
+    // new RunCommand( ()->drivetrainSubsystem.curvatureDrive(0,0.75), drivetrainSubsystem).withTimeout(2),
 
     //6. drive to balance
-    new AutoDriveToPlatformCommand(drivetrainSubsystem,  0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
+    new AutoDriveToPlatformCommand(drivetrainSubsystem,  -0.7, 8, 0.075).withTimeout(6), //ajust these maybe? idk
 
     //7. balance
     new AutoBalanceCommand(drivetrainSubsystem)
@@ -92,7 +92,7 @@ autochooser.addOption("score and dip", new SequentialCommandGroup(
     //arm up
     new ParallelCommandGroup(
     new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(1.65),
+  ).withTimeout(1),
 
 
     //2. outake
@@ -100,6 +100,8 @@ autochooser.addOption("score and dip", new SequentialCommandGroup(
       new GrabberReleaseCommand(grabberSubsystem)
   ).withTimeout(1),
 
+    //3. intake stop
+    new RunCommand( ()->grabberSubsystem.Intakeoff(), grabberSubsystem).withTimeout(0.1),
 
     new ParallelCommandGroup(
       new RunCommand( ()->drivetrainSubsystem.curvatureDrive(0,0.7), drivetrainSubsystem),
@@ -112,13 +114,20 @@ autochooser.addOption("score ONLY", new SequentialCommandGroup(
     //arm up
     new ParallelCommandGroup(
       new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(1.65),
+  ).withTimeout(1.2),
 
 
     //2. outake
     new ParallelCommandGroup(
       new GrabberReleaseCommand(grabberSubsystem)
-  ).withTimeout(1)
+  ).withTimeout(1),
+
+   //3. intake stop
+    new RunCommand( ()->grabberSubsystem.Intakeoff(), grabberSubsystem).withTimeout(0.1),
+
+    //arm down
+    new LowerToGroundCommand(armSubsystem)
+  .withTimeout(1.5)
 
 ));
 autochooser.setDefaultOption("pathplanner test", new SequentialCommandGroup(
@@ -126,7 +135,7 @@ autochooser.setDefaultOption("pathplanner test", new SequentialCommandGroup(
 
     //  1. Drives forwards 
     
-      drivetrainSubsystem.followTrajectoryCommand("TestPath",true, 1, 1)
+      drivetrainSubsystem.followTrajectoryCommand("TestPath",true, 0.01, 0.01)
   
 
   ));
@@ -138,7 +147,7 @@ autochooser.setDefaultOption("pathplanner test", new SequentialCommandGroup(
     //  1. arm up
    new ParallelCommandGroup(
     new RaiseToHighCommand(armSubsystem)
-  ).withTimeout(2.0),
+  ).withTimeout(0.8),
 
 
     //  2. outake

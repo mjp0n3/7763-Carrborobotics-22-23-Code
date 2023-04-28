@@ -29,6 +29,7 @@ public class LowerToGroundCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   armSubsystem.setArmDown();
   
 
@@ -46,5 +47,6 @@ public class LowerToGroundCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+    //armSubsystem.getPosition() >  0.3;
   }
 }

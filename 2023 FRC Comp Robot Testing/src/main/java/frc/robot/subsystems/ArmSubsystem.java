@@ -120,11 +120,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   //arm up
   public void setArmHigh() {
-    ArmRight.set(-.60);
+    ArmRight.set(-1);
   }
   //arm down
   public void setArmDown() {
-    ArmRight.set(.60);
+    ArmRight.set(0.7);
   }
 
   
