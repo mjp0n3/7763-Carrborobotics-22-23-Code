@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.PathPlannerConstants;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
@@ -68,10 +70,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rightEncoder.reset();
 
     // no longer needed since using quadrature encoders
-    // rightEncoder.setPositionConversionFactor(DriveConstants.kLinearDistanceConversionFactor);
-    // leftEncoder.setPositionConversionFactor(DriveConstants.kLinearDistanceConversionFactor);
-    // rightEncoder.setVelocityConversionFactor(DriveConstants.kLinearDistanceConversionFactor / 60);
-    // leftEncoder.setVelocityConversionFactor(DriveConstants.kLinearDistanceConversionFactor / 60);
+    rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor);
+    leftEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor);
+    rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
+    leftEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
 
     
     LeftBack.follow(LeftFront);
@@ -234,9 +236,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro angle", getElevationAngle());
     
   }
-
+ 
+ 
   public Command followTrajectoryCommand(String pathName, boolean zeroInitialPose, double maxacc, double maxspeed) {
-    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, new PathConstraints(1, 1));
+    PathPlannerTrajectory trajectoryToFollow = PathPlanner.loadPath(pathName, new PathConstraints(PathPlannerConstants.autoMaxVelocity, PathPlannerConstants.autoMaxAcceleration));
+
     // Resets the pose of the robot if true (should generally only be true for the first path of an auto)
     if (zeroInitialPose) {
       this.resetOdometry(trajectoryToFollow.getInitialPose());

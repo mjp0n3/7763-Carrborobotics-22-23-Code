@@ -40,9 +40,9 @@ public final class Constants {
 
     public static final class DriveConstants{
         //CisID constant
-        public static final double ksVolts = -11.934; //0.99606 old
+        public static final double ksVolts = 0.237; //0.99606 old old//11.934 old
         public static final double kvVoltSecondsPerMeter = 1.7927; //366.2 old
-        public static final double kaVoltSecondsSquaredPerMeter = 23.389; //132.93 old
+        public static final double kaVoltSecondsSquaredPerMeter = 23.389; //132.93 old old //23.389 old 
         public static final double kPDriveVel = 0.27225; //25.418 old
         
         public static final double kTrackWidthMeters = Units.inchesToMeters(21.25);
@@ -56,10 +56,10 @@ public final class Constants {
         public static final double kRamseteZeta = 0.7;
 
         public static final double kGearRatio = 12.75;
-        public static final double kWheelRadiusInches = 6;
+        public static final double kWheelDiameterInches = 6;
+        public static final double EncoderPulsesPerRevolution = 6;
 
-        public static final double kLinearDistanceConversionFactor = (Units.inchesToMeters(1 / (kGearRatio * 2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches)) * 10));
-
+        public static final double kLinearDistanceConversionFactor = ((kGearRatio  * Math.PI * Units.inchesToMeters(kWheelDiameterInches))/EncoderPulsesPerRevolution);
 
     }
     
