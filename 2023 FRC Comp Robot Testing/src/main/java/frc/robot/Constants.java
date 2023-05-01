@@ -42,8 +42,8 @@ public final class Constants {
         //CisID constant
         public static final double ksVolts = 0.237; //0.99606 old old//11.934 old
         public static final double kvVoltSecondsPerMeter = 1.7927; //366.2 old
-        public static final double kaVoltSecondsSquaredPerMeter = 23.389; //132.93 old old //23.389 old 
-        public static final double kPDriveVel = 0.27225; //25.418 old
+        public static final double kaVoltSecondsSquaredPerMeter = 0.237; //132.93 old old //23.389 old 
+        public static final double kPDriveVel = 1.752; //25.418 old
         
         public static final double kTrackWidthMeters = Units.inchesToMeters(21.25);
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
@@ -55,11 +55,11 @@ public final class Constants {
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
 
-        public static final double kGearRatio = 12.75;
+        public static final double kGearRatio = 1.35;
         public static final double kWheelDiameterInches = 6;
-        public static final double EncoderPulsesPerRevolution = 6;
+        public static final double EncoderPulsesPerRevolution = 256 ;
 
-        public static final double kLinearDistanceConversionFactor = ((kGearRatio  * Math.PI * Units.inchesToMeters(kWheelDiameterInches))/EncoderPulsesPerRevolution);
+        public static final double kLinearDistanceConversionFactor = (((kGearRatio  * Math.PI * Units.inchesToMeters(kWheelDiameterInches))/EncoderPulsesPerRevolution)*0.22727272727);
 
     }
     

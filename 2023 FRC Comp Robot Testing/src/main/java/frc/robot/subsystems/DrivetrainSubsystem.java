@@ -72,8 +72,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // no longer needed since using quadrature encoders
     rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor);
     leftEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor);
-    rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
-    leftEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
+    // rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
+    // leftEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
 
     
     LeftBack.follow(LeftFront);
@@ -99,11 +99,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Configures the encoder to return a distance of 4 for every 256 pulses
     // Also changes the units of getRate
-    rightEncoder.setDistancePerPulse(3.78
-    );
-    leftEncoder.setDistancePerPulse(3.78
-    );
 
+    //slashed cuz 3 times--
+    // rightEncoder.setDistancePerPulse(3.78
+    // );
+    // leftEncoder.setDistancePerPulse(3.78
+    // );\//--
+    
     // Configures the encoder to consider itself stopped after .1 seconds
     rightEncoder.setMinRate(0.1);
     leftEncoder.setMinRate(0.1);
@@ -162,10 +164,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
   
   public double getRightEncoderVelocity() {
-    return rightEncoder.getDistance();
+    return rightEncoder.getRate();
     }  
     public double getLeftEncoderVelocity() {
-      return leftEncoder.getDistance();
+      return leftEncoder.getRate();
     }
     
 
@@ -192,13 +194,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return ((getLeftEncoderPosition() + getRightEncoderPosition()) / 2.0);
       }
 
-        
-      public Encoder getLeftEncoder() {
-        return leftEncoder;
-      }
-      public Encoder getRightEncoder() {
-        return rightEncoder;
-      }
+      //unused
+      // public Encoder getLeftEncoder() {
+      //   return leftEncoder;
+      // }
+      // public Encoder getRightEncoder() {
+      //   return rightEncoder;
+      // }
+
       public double getTurnRate() {
         return -m_gyro.getRate();
       }
@@ -234,7 +237,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RIGHT encoder value meters", getRightEncoderPosition());
     SmartDashboard.putNumber("Gyro heading", getHeading());
     SmartDashboard.putNumber("Gyro angle", getElevationAngle());
-    
+    SmartDashboard.putNumber("RobotVelocity", getLeftEncoderVelocity());
+
   }
  
  
