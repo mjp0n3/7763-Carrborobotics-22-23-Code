@@ -40,8 +40,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    WPI_TalonSRX LeftBack = new WPI_TalonSRX(Constants.DrivetrainConstants.LeftBackID);
 
    //update the ports to be in constants later
-   Encoder leftEncoder = new Encoder(DrivetrainConstants.rightEncoderA, DrivetrainConstants.rightEncoderB, false, Encoder.EncodingType.k2X); 
-   Encoder rightEncoder = new Encoder(DrivetrainConstants.leftEncoderA, DrivetrainConstants.leftEncoderB, true, Encoder.EncodingType.k2X); 
+   Encoder leftEncoder = new Encoder(DrivetrainConstants.rightEncoderA, DrivetrainConstants.rightEncoderB, false, Encoder.EncodingType.k4X); 
+   Encoder rightEncoder = new Encoder(DrivetrainConstants.leftEncoderA, DrivetrainConstants.leftEncoderB, true, Encoder.EncodingType.k4X); 
   
 
   MotorControllerGroup rightControllerGroup = new MotorControllerGroup(RightBack, RightFront);
@@ -69,7 +69,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     leftEncoder.reset();
     rightEncoder.reset();
 
-    // no longer needed since using quadrature encoders
+    // use that distance conversion in constants
     rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor);
     leftEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor);
     // rightEncoder.setDistancePerPulse(DriveConstants.kLinearDistanceConversionFactor / 60);
@@ -107,12 +107,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // );\//--
     
     // Configures the encoder to consider itself stopped after .1 seconds
-    rightEncoder.setMinRate(0.1);
-    leftEncoder.setMinRate(0.1);
+    // rightEncoder.setMinRate(0.1);
+    // leftEncoder.setMinRate(0.1);
 
     // Configures the encoder to consider itself stopped when its rate is below 10
-    rightEncoder.setMinRate(10);
-    leftEncoder.setMinRate(10);
+    // rightEncoder.setMinRate(10);
+    // leftEncoder.setMinRate(10);
 
     // Reverses the direction of the encoder
     rightEncoder.setReverseDirection(false);
@@ -149,10 +149,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   leftEncoder.reset();
   rightEncoder.reset();
     }
-  public void curvatureDrive(double fwd, double rot) {
+    public void curvatureDrive(double fwd, double rot) {
       differentialDrive.curvatureDrive(fwd, rot, true);
     }
-  public Pose2d getPose() {
+    public Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
     public double getRightEncoderPosition() {
@@ -163,8 +163,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       return leftEncoder.getDistance();
     }
   
-  public double getRightEncoderVelocity() {
-    return rightEncoder.getRate();
+    public double getRightEncoderVelocity() {
+      return rightEncoder.getRate();
     }  
     public double getLeftEncoderVelocity() {
       return leftEncoder.getRate();
