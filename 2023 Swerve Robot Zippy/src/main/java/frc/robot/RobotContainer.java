@@ -67,11 +67,20 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
+
+  //R1 puts drive to X
   private void configureButtonBindings() {
     new JoystickButton(m_driverController, Button.kR1.value)
-        .onTrue(new RunCommand(
+        .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    
+    //L1 resets heading (change L2 value?)
+    new JoystickButton(m_driverController, Button.kL2.value)
+    .onTrue(new RunCommand(
+        () -> m_robotDrive.zeroHeading(),
+        m_robotDrive));
+
   }
 
   /**
