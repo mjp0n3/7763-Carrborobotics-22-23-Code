@@ -13,23 +13,25 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   CANSparkMax ArmRight = new CANSparkMax(Constants.ArmConstants.kArmRightId, MotorType.kBrushless);
-  CANSparkMax ArmLeft = new CANSparkMax(Constants.ArmConstants.kArmRightId, MotorType.kBrushless);
+  CANSparkMax ArmLeft = new CANSparkMax(Constants.ArmConstants.kArmLeftId, MotorType.kBrushless);
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
       ArmRight.setInverted(true); 
+      ArmLeft.setInverted(false); 
+
   }
 
       //arm up
       public void setArmHigh() {
-        ArmRight.set(-.50);
-        ArmLeft.set(-.50);
+        ArmRight.set(-0.3);
+        ArmLeft.set(-0.3);
     
       }
       //arm down
       public void setArmDown() {
-        ArmRight.set(.50);
-        ArmLeft.set(.50);
+        ArmRight.set(0.35);
+        ArmLeft.set(0.35);
     
       }
     
@@ -51,6 +53,8 @@ public class ArmSubsystem extends SubsystemBase {
       //arm off
       public void setmotorsoff() {
         ArmRight.set(0);
+        ArmLeft.set(0);
+
       }
       
   @Override

@@ -25,9 +25,12 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   //controller stuff 
-  public static final int ButtonA = 1; //up
-  public static final int ButtonY = 2;
-  public static final int ButtonX = 3; //down
+  public static final int ButtonA = 1;
+  public static final int ButtonB = 2;
+  public static final int ButtonX = 3; 
+  public static final int ButtonY = 4; 
+
+
 
   
 
@@ -37,9 +40,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 1.2; // radians per second
-    public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 2.4; // radians per second
+    public static final double kMagnitudeSlewRate = 3.6; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 4.0; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);
@@ -74,7 +77,7 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-    public static final int kArmRightId = 10;
+    public static final int kArmRightId = 13;
     public static final int kArmLeftId = 11;
     
   }
@@ -131,7 +134,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.08;
+    public static final double kDriveDeadband = 0.1;
   }
 
   public static final class AutoConstants {
@@ -152,4 +155,7 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final int kIntakeMotorId = 14;
+  public static final int ButtonT1 = 0;
 }
