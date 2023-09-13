@@ -20,13 +20,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
      //Intake Cube
      public void setIntakeON() {
-      IntakeMotor.set(-0.5);
+      IntakeMotor.set(-0.8);
     
-  
+      
     }
     //Outake Cube
     public void setOutakeON() {
-      IntakeMotor.set(0.5);
+      IntakeMotor.set(0.95);
   
   
     }

@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -124,14 +123,14 @@ public class RobotContainer {
     // JoystickButton zbutton = new JoystickButton(m_driverController, Constants.ButtonZ);
 
     // xbutton.whileTrue(ArmSubsystem.setArmDown);
-    bbutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmHigh()));
-    xbutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmDown()));
-    xbutton.whileFalse(new InstantCommand(() -> armsubsystem.setmotorsoff()));
-    bbutton.whileFalse(new InstantCommand(() -> armsubsystem.setmotorsoff()));
-    //intake
+    bbutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmintake()));
+    xbutton.whileTrue(new InstantCommand(() -> armsubsystem.setArmstow()));
+    // xbutton.whileFalse(new InstantCommand(() -> armsubsystem.setmotorsoff()));
+    // bbutton.whileFalse(new InstantCommand(() -> armsubsystem.setmotorsoff()));
+    // intake
     ybutton.whileTrue(new InstantCommand(() -> intakesubsystem.setIntakeON()));
     abutton.whileTrue(new InstantCommand(() -> intakesubsystem.setOutakeON()));
-    bbutton.whileFalse(new InstantCommand(() -> intakesubsystem.setIntakeOFF()));
+    abutton.whileFalse(new InstantCommand(() -> intakesubsystem.setIntakeOFF()));
     ybutton.whileFalse(new InstantCommand(() -> intakesubsystem.setIntakeOFF()));
 
    
